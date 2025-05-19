@@ -1,11 +1,15 @@
 {
   "name": "links-page",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "html-minifier-terser": "^7.2.0"
   },
   "scripts": {
     "build": "html-minifier-terser --input-dir . --output-dir dist --file-ext html --collapse-whitespace --remove-comments"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.7",
+    "tailwindcss": "^4.1.7"
   }
 }
