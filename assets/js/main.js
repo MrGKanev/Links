@@ -3,6 +3,9 @@ let mainLinks = [];
 let affiliateLinks = [];
 let siteConfig = {};
 
+// Cache for loaded SVG icons
+const iconCache = new Map();
+
 // Function to load all data from JSON files
 async function loadData() {
   try {
@@ -51,6 +54,69 @@ function updateLinkTag(rel, href) {
     document.head.appendChild(link);
   }
   link.setAttribute('href', href);
+}
+
+// Function to load and create SVG icon
+async function createSVGIcon(iconName, className = '') {
+  // Check cache first
+  if (iconCache.has(iconName)) {
+    const cachedSvg = iconCache.get(iconName);
+    const clonedSvg = cachedSvg.cloneNode(true);
+    clonedSvg.setAttribute('class', className);
+    return clonedSvg;
+  }
+
+  try {
+    // Load SVG file
+    const response = await fetch(`./assets/img/icons/${iconName}.svg`);
+    if (!response.ok) {
+      throw new Error(`Failed to load icon: ${iconName}`);
+    }
+    
+    const svgText = await response.text();
+    
+    // Parse SVG
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+    const svgElement = svgDoc.querySelector('svg');
+    
+    if (!svgElement) {
+      throw new Error(`Invalid SVG file: ${iconName}`);
+    }
+    
+    // Set standard attributes
+    svgElement.setAttribute('fill', 'currentColor');
+    svgElement.setAttribute('aria-hidden', 'true');
+    svgElement.setAttribute('class', className);
+    
+    // Ensure viewBox is set
+    if (!svgElement.getAttribute('viewBox')) {
+      svgElement.setAttribute('viewBox', '0 0 24 24');
+    }
+    
+    // Cache the SVG
+    iconCache.set(iconName, svgElement.cloneNode(true));
+    
+    return svgElement;
+  } catch (error) {
+    console.warn(`Failed to load icon ${iconName}:`, error);
+    
+    // Return fallback icon
+    const fallbackSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    fallbackSvg.setAttribute('class', className);
+    fallbackSvg.setAttribute('fill', 'currentColor');
+    fallbackSvg.setAttribute('viewBox', '0 0 24 24');
+    fallbackSvg.setAttribute('aria-hidden', 'true');
+    
+    // Simple circle as fallback
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '12');
+    circle.setAttribute('cy', '12');
+    circle.setAttribute('r', '10');
+    fallbackSvg.appendChild(circle);
+    
+    return fallbackSvg;
+  }
 }
 
 // Function to generate a PNG-based favicon.ico equivalent
@@ -270,7 +336,7 @@ function updateStructuredData() {
 }
 
 // Function to create a link card
-function createLinkCard(link, isAffiliate = false) {
+async function createLinkCard(link, isAffiliate = false) {
   // Create list item element for proper semantics
   const listItem = document.createElement('li');
   
@@ -288,19 +354,44 @@ function createLinkCard(link, isAffiliate = false) {
     card.className = `link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg ${isAffiliate ? 'border-l-4 border-purple-500' : ''}`;
   }
 
-  card.innerHTML = `
-    <div class="flex items-center">
-      <div class="w-12 h-12 ${link.bgColor} rounded-lg flex items-center justify-center mr-4">
-        <i class="${link.icon} text-white text-xl" aria-hidden="true"></i>
-      </div>
-      <div class="flex-1">
-        <h4 class="font-semibold text-gray-900">${link.title}</h4>
-        <p class="text-gray-600 text-sm">${link.description}</p>
-      </div>
-      <i class="fas ${link.type === 'discord' ? 'fa-copy' : 'fa-external-link-alt'} text-gray-400" aria-hidden="true"></i>
-    </div>
-  `;
-
+  // Create icon container
+  const iconContainer = document.createElement('div');
+  iconContainer.className = `w-12 h-12 ${link.bgColor} rounded-lg flex items-center justify-center mr-4`;
+  
+  // Create icon (async)
+  const icon = await createSVGIcon(link.icon, 'w-6 h-6 text-white');
+  iconContainer.appendChild(icon);
+  
+  // Create content container
+  const contentContainer = document.createElement('div');
+  contentContainer.className = 'flex-1';
+  
+  const title = document.createElement('h4');
+  title.className = 'font-semibold text-gray-900';
+  title.textContent = link.title;
+  
+  const description = document.createElement('p');
+  description.className = 'text-gray-600 text-sm';
+  description.textContent = link.description;
+  
+  contentContainer.appendChild(title);
+  contentContainer.appendChild(description);
+  
+  // Create external icon (async)
+  const externalIcon = await createSVGIcon(
+    link.type === 'discord' ? 'copy' : 'external', 
+    'w-5 h-5 text-gray-400'
+  );
+  
+  // Create main container
+  const mainContainer = document.createElement('div');
+  mainContainer.className = 'flex items-center';
+  mainContainer.appendChild(iconContainer);
+  mainContainer.appendChild(contentContainer);
+  mainContainer.appendChild(externalIcon);
+  
+  card.appendChild(mainContainer);
+  
   // Append the anchor to the list item
   listItem.appendChild(card);
   return listItem;
@@ -331,21 +422,21 @@ function showToast(message) {
 }
 
 // Function to render main links
-function renderMainLinks() {
+async function renderMainLinks() {
   const container = document.getElementById('mainLinks');
-  mainLinks.forEach(link => {
-    const linkCard = createLinkCard(link);
+  for (const link of mainLinks) {
+    const linkCard = await createLinkCard(link);
     container.appendChild(linkCard);
-  });
+  }
 }
 
 // Function to render affiliate links
-function renderAffiliateLinks() {
+async function renderAffiliateLinks() {
   const container = document.getElementById('affiliateLinks');
-  affiliateLinks.forEach(link => {
-    const linkCard = createLinkCard(link, true);
+  for (const link of affiliateLinks) {
+    const linkCard = await createLinkCard(link, true);
     container.appendChild(linkCard);
-  });
+  }
 }
 
 // Function to toggle affiliate section
@@ -390,9 +481,9 @@ async function initializePage() {
   // Load all data from JSON files
   await loadData();
   
-  // Render links
-  renderMainLinks();
-  renderAffiliateLinks();
+  // Render links (async to load icons)
+  await renderMainLinks();
+  await renderAffiliateLinks();
 
   // Add event listeners
   document.getElementById('affiliateToggle').addEventListener('click', toggleAffiliateSection);
