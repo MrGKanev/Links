@@ -4,80 +4,154 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MrGKanev's Links</title>
+
+  <!-- Primary Meta Tags -->
+  <title>MrGKanev's Links - Connect with Georgi Kanev</title>
+  <meta name="title" content="MrGKanev's Links - Connect with Georgi Kanev">
+  <meta name="description"
+    content="Connect with MrGKanev (Georgi Kanev) - Self-employed web developer, geek, and open-source enthusiast. Find all my social media links, projects, and ways to support my work.">
+  <meta name="keywords"
+    content="MrGKanev, Georgi Kanev, web developer, open source, projects, bimbala, antiproxies, mgknet, github, social media">
+  <meta name="author" content="Georgi Kanev (MrGKanev)">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://links.mrgkanev.eu">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://links.mrgkanev.eu">
+  <meta property="og:title" content="MrGKanev's Links - Connect with Georgi Kanev">
+  <meta property="og:description"
+    content="Connect with MrGKanev (Georgi Kanev) - Self-employed web developer, geek, and open-source enthusiast. Find all my social media links, projects, and ways to support my work.">
+  <meta property="og:image" content="https://links.mrgkanev.eu/assets/img/mini_profile.png">
+  <meta property="og:site_name" content="MrGKanev's Links">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://links.mrgkanev.eu">
+  <meta property="twitter:title" content="MrGKanev's Links - Connect with Georgi Kanev">
+  <meta property="twitter:description"
+    content="Connect with MrGKanev (Georgi Kanev) - Self-employed web developer, geek, and open-source enthusiast. Find all my social media links, projects, and ways to support my work.">
+  <meta property="twitter:image" content="https://links.mrgkanev.eu/assets/img/mini_profile.png">
+  <meta property="twitter:creator" content="@mrgkanev">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon-16x16.png">
+  <link rel="manifest" href="./assets/img/site.webmanifest">
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    as="style">
+  <link rel="preload" href="./assets/js/data.json" as="fetch" crossorigin>
+  <link rel="preload" href="./assets/js/config.json" as="fetch" crossorigin>
+
+  <!-- Stylesheets -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="./assets/css/styles.css" rel="stylesheet">
+
+  <!-- DNS Prefetch for external domains -->
+  <link rel="dns-prefetch" href="//github.com">
+  <link rel="dns-prefetch" href="//twitter.com">
+  <link rel="dns-prefetch" href="//instagram.com">
+  <link rel="dns-prefetch" href="//linkedin.com">
+  <link rel="dns-prefetch" href="//producthunt.com">
+
+  <!-- Alternate language versions (if you have them) -->
+  <!-- <link rel="alternate" hreflang="bg" href="https://links.mrgkanev.eu/bg"> -->
 </head>
 
 <body class="bg-gradient-custom min-h-screen">
   <div class="container mx-auto px-4 py-8 max-w-md">
     <!-- Header Section -->
-    <div class="text-center mb-8">
+    <header class="text-center mb-8">
       <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-white shadow-lg flex items-center justify-center">
-        <img src="./assets/img/mini_profile.png" alt="Profile Picture" class="w-28 h-28 rounded-full object-cover">
+        <img id="profileImage" src="./assets/img/mini_profile.png" alt="MrGKanev - Georgi Kanev Profile Picture"
+          class="w-28 h-28 rounded-full object-cover" width="112" height="112">
       </div>
-      <h1 class="text-3xl font-bold text-white mb-4">MrGKanev</h1>
-      <p class="text-white/90 text-lg leading-relaxed px-4">
+      <h1 id="profileName" class="text-3xl font-bold text-white mb-4">MrGKanev</h1>
+      <p id="profileBio" class="text-white/90 text-lg leading-relaxed px-4">
         Hello, I'm a self-employed web developer (yep I'm that old), geek, and open-source enthusiast.
         Some of my projects are <span class="font-semibold">@bimbalacom</span>,
         <span class="font-semibold">@antiproxies</span> and <span class="font-semibold">@mgknetcom</span>.
       </p>
-    </div>
+    </header>
 
-    <!-- Main Links Section -->
-    <div id="mainLinks" class="space-y-4 mb-6"></div>
+    <!-- Main Navigation / Links Section -->
+    <nav aria-label="Social Media and Professional Links">
+      <div id="mainLinks" class="space-y-4 mb-6" role="list"></div>
+    </nav>
 
     <!-- Affiliate Links Toggle Button -->
-    <div class="mb-4">
-      <button id="affiliateToggle"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg border-2 border-dashed border-purple-300">
-        <div class="flex items-center justify-center">
-          <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
-            <i class="fas fa-heart text-white text-xl"></i>
+    <section aria-label="Support Options">
+      <div class="mb-4">
+        <button id="affiliateToggle"
+          class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg border-2 border-dashed border-purple-300"
+          aria-expanded="false" aria-controls="affiliateSection">
+          <div class="flex items-center justify-center">
+            <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
+              <i class="fas fa-heart text-white text-xl" aria-hidden="true"></i>
+            </div>
+            <div class="flex-1 text-center">
+              <h2 class="font-semibold text-gray-900">Support My Work</h2>
+              <p class="text-gray-600 text-sm">Click to see ways you can help</p>
+            </div>
+            <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300" id="toggleIcon"
+              aria-hidden="true"></i>
           </div>
-          <div class="flex-1 text-center">
-            <h3 class="font-semibold text-gray-900">Support My Work</h3>
-            <p class="text-gray-600 text-sm">Click to see ways you can help</p>
-          </div>
-          <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300" id="toggleIcon"></i>
-        </div>
-      </button>
-    </div>
-
-    <!-- Affiliate Links Section -->
-    <div id="affiliateSection" class="affiliate-section mb-8">
-      <div class="space-y-3" id="affiliateLinks"></div>
-      <div class="text-center mt-4">
-        <p class="text-white/70 text-sm">
-          <i class="fas fa-info-circle mr-1"></i>
-          These are affiliate links. Using them helps support my work at no extra cost to you!
-        </p>
+        </button>
       </div>
-    </div>
+
+      <!-- Affiliate Links Section -->
+      <div id="affiliateSection" class="affiliate-section mb-8" role="list">
+        <div class="space-y-3" id="affiliateLinks"></div>
+        <div class="text-center mt-4">
+          <p class="text-white/70 text-sm">
+            <i class="fas fa-info-circle mr-1" aria-hidden="true"></i>
+            These are affiliate links. Using them helps support my work at no extra cost to you!
+          </p>
+        </div>
+      </div>
+    </section>
 
     <!-- Footer -->
-    <div class="text-center">
+    <footer class="text-center">
       <p class="text-white/70 text-sm">
-        Build your own by forking
-        <a href="https://github.com/#" target="_blank" rel="noopener noreferrer"
+        <span id="footerText">Build your own by forking</span>
+        <a id="footerLink" href="https://github.com/mrgkanev/links" target="_blank" rel="noopener noreferrer"
           class="text-white underline hover:text-white/90">
           Links
         </a>
       </p>
-    </div>
+    </footer>
 
     <!-- Toast Notification -->
     <div id="toast"
-      class="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300">
+      class="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300"
+      role="alert" aria-live="polite">
       <div class="flex items-center">
-        <i class="fas fa-check-circle text-green-400 mr-2"></i>
+        <i class="fas fa-check-circle text-green-400 mr-2" aria-hidden="true"></i>
         <span>Copied to clipboard!</span>
       </div>
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="./assets/js/main.js"></script>
+
+  <!-- Google Analytics (replace with your tracking ID) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_TRACKING_ID');
+  </script> -->
 </body>
 
 </html>

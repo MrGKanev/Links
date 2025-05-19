@@ -1,0 +1,156 @@
+# Enhanced workflow for deploying optimized static content to GitHub Pages
+name: Build and Deploy to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main", "master"]
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build and optimize job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install --save-dev html-minifier-terser
+      
+      - name: Create build directory
+        run: mkdir -p dist
+      
+      - name: Copy and optimize files
+        run: |
+          # Copy all files to dist
+          cp -r . dist/
+          
+          # Remove unnecessary files from dist
+          rm -rf dist/.git dist/.github dist/node_modules dist/package*.json dist/.gitignore
+          
+          # Minify only HTML files
+          npx html-minifier-terser \
+            --input-dir dist \
+            --output-dir dist \
+            --file-ext html \
+            --collapse-whitespace \
+            --remove-comments \
+            --remove-optional-tags \
+            --remove-redundant-attributes \
+            --remove-script-type-attrs \
+            --remove-tag-whitespace \
+            --use-short-doctype
+      
+      - name: Generate build info
+        run: |
+          echo "Build completed at: $(date)" > dist/build-info.txt
+          echo "Commit: ${{ github.sha }}" >> dist/build-info.txt
+          echo "Branch: ${{ github.ref_name }}" >> dist/build-info.txt
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: optimized-site
+          path: dist/
+          retention-days: 1
+
+  # Deploy job
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: optimized-site
+          path: dist/
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Optional: Build report job
+  report:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: optimized-site
+          path: dist/
+      
+      - name: Generate size report
+        run: |
+          echo "## 📊 Build Report" >> $GITHUB_STEP_SUMMARY
+          echo "| File Type | Count | Total Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|------------|" >> $GITHUB_STEP_SUMMARY
+          
+          # HTML files (optimized)
+          html_count=$(find dist -name "*.html" | wc -l)
+          html_size=$(find dist -name "*.html" -exec ls -la {} \; | awk '{sum+=$5} END {printf "%.1f KB", sum/1024}')
+          echo "| HTML (minified) | $html_count | $html_size |" >> $GITHUB_STEP_SUMMARY
+          
+          # CSS files (unmodified)
+          css_count=$(find dist -name "*.css" | wc -l)
+          css_size=$(find dist -name "*.css" -exec ls -la {} \; | awk '{sum+=$5} END {printf "%.1f KB", sum/1024}')
+          echo "| CSS | $css_count | $css_size |" >> $GITHUB_STEP_SUMMARY
+          
+          # JS files (unmodified)
+          js_count=$(find dist -name "*.js" | wc -l)
+          js_size=$(find dist -name "*.js" -exec ls -la {} \; | awk '{sum+=$5} END {printf "%.1f KB", sum/1024}')
+          echo "| JavaScript | $js_count | $js_size |" >> $GITHUB_STEP_SUMMARY
+          
+          # JSON files (unmodified)
+          json_count=$(find dist -name "*.json" | wc -l)
+          json_size=$(find dist -name "*.json" -exec ls -la {} \; | awk '{sum+=$5} END {printf "%.1f KB", sum/1024}')
+          echo "| JSON | $json_count | $json_size |" >> $GITHUB_STEP_SUMMARY
+          
+          # Images (unmodified)
+          img_count=$(find dist -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" | wc -l)
+          img_size=$(find dist -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" -o -name "*.svg" -exec ls -la {} \; | awk '{sum+=$5} END {printf "%.1f KB", sum/1024}')
+          echo "| Images | $img_count | $img_size |" >> $GITHUB_STEP_SUMMARY
+          
+          # Total size
+          total_size=$(find dist -type f -exec ls -la {} \; | awk '{sum+=$5} END {printf "%.1f KB", sum/1024}')
+          echo "| **Total** | | **$total_size** |" >> $GITHUB_STEP_SUMMARY
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Deployment URL**: ${{ needs.deploy.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "🚀 **Status**: Successfully deployed!" >> $GITHUB_STEP_SUMMARY
+          echo "📝 **Note**: Only HTML files are minified, CSS/JS/JSON remain readable for debugging" >> $GITHUB_STEP_SUMMARY
