@@ -1,4 +1,3 @@
-
 // Global variables to store data
 let mainLinks = [];
 let affiliateLinks = [];
@@ -54,7 +53,41 @@ function updateLinkTag(rel, href) {
   link.setAttribute('href', href);
 }
 
-// Function to generate emoji favicon
+// Function to generate a PNG-based favicon.ico equivalent
+function generateFaviconIco(emoji, backgroundColor) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 32;
+  canvas.height = 32;
+  
+  // Set background
+  ctx.fillStyle = backgroundColor;
+  ctx.fillRect(0, 0, 32, 32);
+  
+  // Add emoji
+  ctx.font = '20px Arial, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, 16, 16);
+  
+  // Convert to blob and create object URL
+  canvas.toBlob((blob) => {
+    const faviconUrl = URL.createObjectURL(blob);
+    
+    // Add as fallback favicon
+    let faviconLink = document.querySelector('link[rel="icon"][type="image/png"]');
+    if (!faviconLink) {
+      faviconLink = document.createElement('link');
+      faviconLink.setAttribute('rel', 'icon');
+      faviconLink.setAttribute('type', 'image/png');
+      faviconLink.setAttribute('sizes', '32x32');
+      document.head.appendChild(faviconLink);
+    }
+    faviconLink.setAttribute('href', faviconUrl);
+  }, 'image/png');
+}
+
+// Function to generate emoji favicon with traditional ICO support
 function generateEmojiFavicon(emoji, backgroundColor = '#667eea') {
   // Create SVG with emoji
   const svg = `
@@ -66,6 +99,9 @@ function generateEmojiFavicon(emoji, backgroundColor = '#667eea') {
   
   // Convert SVG to data URL
   const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+  
+  // Create traditional favicon.ico equivalent using canvas
+  generateFaviconIco(emoji, backgroundColor);
   
   // Update favicon links
   updateLinkTag('icon', dataUrl);
@@ -121,11 +157,15 @@ function generateEmojiFavicon(emoji, backgroundColor = '#667eea') {
 function generateWebAppManifest() {
   if (!siteConfig.site || !siteConfig.profile) return;
   
+  // Get the current path for proper start_url
+  const currentPath = window.location.pathname;
+  const basePath = currentPath.endsWith('/') ? currentPath : currentPath + '/';
+  
   const manifest = {
     name: siteConfig.site.title,
     short_name: siteConfig.profile.name,
     description: siteConfig.site.description,
-    start_url: "/",
+    start_url: basePath, // Use current path instead of "/"
     display: "standalone",
     background_color: siteConfig.site.favicon?.backgroundColor || "#667eea",
     theme_color: siteConfig.site.favicon?.backgroundColor || "#667eea",

@@ -12,11 +12,13 @@
 
   <!-- Favicon will be generated dynamically from config.json -->
 
+  <!-- Load Google Fonts immediately instead of preloading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Preload critical resources -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-    as="style">
   <link rel="preload" href="./assets/js/data.json" as="fetch" crossorigin>
   <link rel="preload" href="./assets/js/config.json" as="fetch" crossorigin>
+  <link rel="preload" href="./assets/css/styles_min.css" as="style">
 
   <!-- Stylesheets -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -28,6 +30,14 @@
   <link rel="dns-prefetch" href="//instagram.com">
   <link rel="dns-prefetch" href="//linkedin.com">
   <link rel="dns-prefetch" href="//producthunt.com">
+
+  <!-- Add font display optimization -->
+  <style>
+    /* Ensure font is immediately available and prevent FOUT */
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    }
+  </style>
 
   <!-- All other SEO meta tags will be injected by JavaScript from config.json -->
 </head>
@@ -79,7 +89,8 @@
             <i class="fas fa-info-circle mr-1" aria-hidden="true"></i>
             These are affiliate links. Using them helps support my work at no extra cost to you!
           </p>
-        </div></div>
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
