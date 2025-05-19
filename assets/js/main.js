@@ -1,3 +1,4 @@
+
 // Global variables to store data
 let mainLinks = [];
 let affiliateLinks = [];
@@ -53,6 +54,113 @@ function updateLinkTag(rel, href) {
   link.setAttribute('href', href);
 }
 
+// Function to generate emoji favicon
+function generateEmojiFavicon(emoji, backgroundColor = '#667eea') {
+  // Create SVG with emoji
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+      <rect width="64" height="64" rx="12" fill="${backgroundColor}"/>
+      <text x="32" y="44" text-anchor="middle" font-size="36" font-family="Arial, sans-serif">${emoji}</text>
+    </svg>
+  `;
+  
+  // Convert SVG to data URL
+  const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+  
+  // Update favicon links
+  updateLinkTag('icon', dataUrl);
+  updateLinkTag('shortcut icon', dataUrl);
+  
+  // Create different sizes for different devices
+  const sizes = [16, 32, 180];
+  sizes.forEach(size => {
+    const scaledSvg = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+        <rect width="${size}" height="${size}" rx="${size * 0.1875}" fill="${backgroundColor}"/>
+        <text x="${size/2}" y="${size * 0.7}" text-anchor="middle" font-size="${size * 0.6}" font-family="Arial, sans-serif">${emoji}</text>
+      </svg>
+    `;
+    const scaledDataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(scaledSvg)));
+    
+    if (size === 16) {
+      updateLinkTag('icon', scaledDataUrl);
+      // Also set as favicon.ico alternative
+      let link = document.querySelector('link[rel="icon"][sizes="16x16"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'icon');
+        link.setAttribute('sizes', '16x16');
+        link.setAttribute('type', 'image/svg+xml');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', scaledDataUrl);
+    } else if (size === 32) {
+      let link = document.querySelector('link[rel="icon"][sizes="32x32"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'icon');
+        link.setAttribute('sizes', '32x32');
+        link.setAttribute('type', 'image/svg+xml');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', scaledDataUrl);
+    } else if (size === 180) {
+      let link = document.querySelector('link[rel="apple-touch-icon"]');
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'apple-touch-icon');
+        link.setAttribute('sizes', '180x180');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', scaledDataUrl);
+    }
+  });
+}
+
+// Function to generate web app manifest
+function generateWebAppManifest() {
+  if (!siteConfig.site || !siteConfig.profile) return;
+  
+  const manifest = {
+    name: siteConfig.site.title,
+    short_name: siteConfig.profile.name,
+    description: siteConfig.site.description,
+    start_url: "/",
+    display: "standalone",
+    background_color: siteConfig.site.favicon?.backgroundColor || "#667eea",
+    theme_color: siteConfig.site.favicon?.backgroundColor || "#667eea",
+    icons: []
+  };
+  
+  // Generate icons with emoji if configured
+  if (siteConfig.site.favicon?.emoji) {
+    const sizes = [192, 512];
+    sizes.forEach(size => {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+          <rect width="${size}" height="${size}" rx="${size * 0.1875}" fill="${manifest.background_color}"/>
+          <text x="${size/2}" y="${size * 0.7}" text-anchor="middle" font-size="${size * 0.6}" font-family="Arial, sans-serif">${siteConfig.site.favicon.emoji}</text>
+        </svg>
+      `;
+      const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+      
+      manifest.icons.push({
+        src: dataUrl,
+        sizes: `${size}x${size}`,
+        type: "image/svg+xml",
+        purpose: size === 192 ? "any maskable" : "any"
+      });
+    });
+  }
+  
+  // Convert manifest to blob and create URL
+  const manifestBlob = new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json' });
+  const manifestUrl = URL.createObjectURL(manifestBlob);
+  
+  // Update manifest link
+  updateLinkTag('manifest', manifestUrl);
+}
+
 // Function to update page content with config data
 function updatePageContent() {
   if (!siteConfig.site) return;
@@ -68,6 +176,17 @@ function updatePageContent() {
   
   // Update canonical link
   updateLinkTag('canonical', siteConfig.site.canonical);
+  
+  // Generate emoji favicon if configured
+  if (siteConfig.site.favicon && siteConfig.site.favicon.emoji) {
+    generateEmojiFavicon(
+      siteConfig.site.favicon.emoji, 
+      siteConfig.site.favicon.backgroundColor || '#667eea'
+    );
+  }
+  
+  // Generate web app manifest
+  generateWebAppManifest();
   
   // Update Open Graph tags
   updateMetaTag('og:type', siteConfig.site.type, 'property');

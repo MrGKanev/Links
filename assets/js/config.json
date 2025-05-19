@@ -12,7 +12,11 @@
     "twitterHandle": "@mrgkanev",
     "canonical": "https://links.gkanev.com",
     "robots": "index, follow",
-    "type": "website"
+    "type": "website",
+    "favicon": {
+      "emoji": "🔗",
+      "backgroundColor": "#667eea"
+    }
   },
   "profile": {
     "name": "MrGKanev",
