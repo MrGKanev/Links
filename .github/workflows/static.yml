@@ -33,7 +33,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
       
       - name: Install dependencies
         run: |
@@ -45,11 +44,8 @@ jobs:
       
       - name: Copy and optimize files
         run: |
-          # Copy all files to dist
-          cp -r . dist/
-          
-          # Remove unnecessary files from dist
-          rm -rf dist/.git dist/.github dist/node_modules dist/package*.json dist/.gitignore
+          # Copy files to dist, excluding build directories and git files
+          rsync -av --exclude='dist' --exclude='.git' --exclude='.github' --exclude='node_modules' --exclude='package*.json' --exclude='.gitignore' . dist/
           
           # Minify only HTML files
           npx html-minifier-terser \
