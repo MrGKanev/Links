@@ -56,7 +56,6 @@ jobs:
             --remove-comments \
             --remove-optional-tags \
             --remove-redundant-attributes \
-            --remove-script-type-attrs \
             --remove-tag-whitespace \
             --use-short-doctype
       
