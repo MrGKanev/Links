@@ -2,7 +2,7 @@
 
 A modern, customizable, and SEO-optimized links page (similar to Linktree) that you can self-host and fully control. Perfect for developers, creators, and businesses who want a professional landing page for all their important links.
 
-![Links Page Preview](https://img.shields.io/badge/Status-Active-green?style=flat-square) 
+![Links Page Preview](https://img.shields.io/badge/Status-Active-green?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
@@ -12,24 +12,28 @@ A modern, customizable, and SEO-optimized links page (similar to Linktree) that 
 ## ✨ Features
 
 ### 🎨 **Modern Design**
+
 - Beautiful gradient background
 - Smooth animations and hover effects
 - Responsive design that works on all devices
 - Clean, professional layout
 
 ### ⚙️ **Fully Configurable**
+
 - All content managed through JSON files
 - No need to edit HTML/CSS for content changes
 - Easy to add, remove, or modify links
 - Profile information and bio management
 
 ### 🔍 **SEO Optimized**
+
 - Dynamic meta tags generation
 - Open Graph and Twitter Cards support
 - Structured data (JSON-LD) for search engines
 - Configurable canonical URLs and descriptions
 
 ### 🌟 **Advanced Features**
+
 - **Emoji Favicons**: Dynamic favicon generation using any emoji
 - **Discord Integration**: Copy Discord username with one click
 - **Affiliate Links**: Dedicated section for monetization links
@@ -37,6 +41,7 @@ A modern, customizable, and SEO-optimized links page (similar to Linktree) that 
 - **PWA Support**: Automatically generated web app manifest
 
 ### 🚀 **Deployment Ready**
+
 - GitHub Actions workflow for automatic deployment
 - HTML minification for faster loading
 - Build reports and optimization
@@ -53,18 +58,22 @@ A modern, customizable, and SEO-optimized links page (similar to Linktree) that 
 ## 🚀 Quick Start
 
 ### 1. Fork & Clone
+
 ```bash
 git clone https://github.com/yourusername/links.git
 cd links
 ```
 
 ### 2. Install Dependencies (Optional)
+
 ```bash
 npm install
 ```
 
 ### 3. Configure Your Site
+
 Edit `assets/js/config.json`:
+
 ```json
 {
   "site": {
@@ -87,7 +96,9 @@ Edit `assets/js/config.json`:
 ```
 
 ### 4. Add Your Links
+
 Edit `assets/js/data.json`:
+
 ```json
 {
   "mainLinks": [
@@ -105,6 +116,7 @@ Edit `assets/js/data.json`:
 ```
 
 ### 5. Deploy
+
 The site includes GitHub Actions for automatic deployment to GitHub Pages. Just push to your repository!
 
 ## 📝 Configuration Guide
@@ -112,6 +124,7 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ### Site Configuration (`config.json`)
 
 #### Basic Settings
+
 ```json
 {
   "site": {
@@ -124,6 +137,7 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ```
 
 #### Favicon Configuration
+
 ```json
 {
   "site": {
@@ -136,6 +150,7 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ```
 
 #### Profile Settings
+
 ```json
 {
   "profile": {
@@ -156,6 +171,7 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ### Links Configuration (`data.json`)
 
 #### Regular Links
+
 ```json
 {
   "mainLinks": [
@@ -173,6 +189,7 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ```
 
 #### Discord Integration
+
 ```json
 {
   "id": "discord",
@@ -187,6 +204,7 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ```
 
 #### Affiliate/Support Links
+
 ```json
 {
   "affiliateLinks": [
@@ -206,37 +224,70 @@ The site includes GitHub Actions for automatic deployment to GitHub Pages. Just 
 ## 🎨 Customization
 
 ### Colors
+
 The site uses Tailwind CSS. You can customize colors by editing the `bgColor` classes in your links or modifying the CSS variables.
 
 ### Fonts
+
 Change the font by updating the Google Fonts import in `index.html` and the CSS in `styles.css`.
 
 ### Layout
+
 Modify the HTML structure in `index.html` or add custom CSS to `styles.css`.
 
 ### Animations
+
 Customize animations by editing the CSS transitions and JavaScript animation functions.
 
 ## 🏗️ Build & Deploy
 
 ### Local Development
+
+For development, you can work with the source CSS file directly or use Tailwind's watch mode:
+
 ```bash
-# No build step needed for development
-# Just open index.html in your browser
+# Option 1: No build step needed - just open index.html
+# The site will work with the existing minified CSS
+
+# Option 2: Use Tailwind CSS watch mode for live updates
+npx @tailwindcss/cli -i ./assets/css/styles.css -o ./assets/css/styles_min.css --watch
 ```
 
 ### Production Build
+
+Build optimized versions of both HTML and CSS:
+
 ```bash
+# Build minified CSS
+npx @tailwindcss/cli -i ./assets/css/styles.css -o ./assets/css/styles_min.css --minify
+
+# Build minified HTML (existing script)
 npm run build
 ```
 
+Or update your package.json scripts to include both:
+
+```json
+{
+  "scripts": {
+    "build": "npm run build:css && npm run build:html",
+    "build:css": "npx @tailwindcss/cli -i ./assets/css/styles.css -o ./assets/css/styles_min.css --minify",
+    "build:html": "html-minifier-terser --input-dir . --output-dir dist --file-ext html --collapse-whitespace --remove-comments",
+    "dev": "npx @tailwindcss/cli -i ./assets/css/styles.css -o ./assets/css/styles_min.css --watch"
+  }
+}
+```
+
 ### GitHub Pages Deployment
+
 1. Enable GitHub Pages in your repository settings
 2. Set source to "GitHub Actions"
 3. Push to main branch - automatic deployment will start
 
 ### Manual Deployment
+
 Upload the contents to any static hosting provider:
+
 - Netlify
 - Vercel
 - GitHub Pages
@@ -254,16 +305,19 @@ The site includes built-in click tracking. To enable Google Analytics:
 ## 🔧 Troubleshooting
 
 ### Links not loading?
+
 - Check that `data.json` and `config.json` are valid JSON
 - Ensure all URLs are properly formatted
 - Check browser console for JavaScript errors
 
 ### Favicon not appearing?
+
 - Verify the emoji is properly encoded in `config.json`
 - Check that the backgroundColor is a valid hex color
 - Clear browser cache and reload
 
 ### Deployment issues?
+
 - Check GitHub Actions logs for errors
 - Ensure GitHub Pages is enabled in repository settings
 - Verify all files are committed and pushed
@@ -273,6 +327,7 @@ The site includes built-in click tracking. To enable Google Analytics:
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### Development Setup
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
