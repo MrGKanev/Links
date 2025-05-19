@@ -5,7 +5,7 @@
       "title": "GitHub",
       "description": "Check out my repositories",
       "url": "https://github.com/mrgkanev",
-      "icon": "fab fa-github",
+      "icon": "github",
       "bgColor": "bg-gray-900",
       "type": "external"
     },
@@ -14,7 +14,7 @@
       "title": "Twitter",
       "description": "Follow me for updates",
       "url": "https://twitter.com/mrgkanev",
-      "icon": "fab fa-twitter",
+      "icon": "twitter",
       "bgColor": "bg-blue-500",
       "type": "external"
     },
@@ -23,7 +23,7 @@
       "title": "Instagram",
       "description": "Behind the scenes",
       "url": "https://instagram.com/mrgkanev",
-      "icon": "fab fa-instagram",
+      "icon": "instagram",
       "bgColor": "bg-gradient-to-br from-purple-600 via-pink-600 to-yellow-500",
       "type": "external"
     },
@@ -32,7 +32,7 @@
       "title": "LinkedIn",
       "description": "Professional network",
       "url": "https://www.linkedin.com/in/mrgkanev/",
-      "icon": "fab fa-linkedin-in",
+      "icon": "linkedin",
       "bgColor": "bg-blue-700",
       "type": "external"
     },
@@ -41,7 +41,7 @@
       "title": "Discord",
       "description": "Chat with me",
       "url": "#",
-      "icon": "fab fa-discord",
+      "icon": "discord",
       "bgColor": "bg-indigo-600",
       "type": "discord",
       "discordUsername": "mrgkanev#1234"
@@ -51,7 +51,7 @@
       "title": "Product Hunt",
       "description": "Product launches",
       "url": "https://www.producthunt.com/@mrgkanev",
-      "icon": "fab fa-product-hunt",
+      "icon": "producthunt",
       "bgColor": "bg-orange-500",
       "type": "external"
     },
@@ -60,7 +60,7 @@
       "title": "Personal Website",
       "description": "Portfolio & blog",
       "url": "https://gkanev.com",
-      "icon": "fas fa-globe",
+      "icon": "globe",
       "bgColor": "bg-green-600",
       "type": "external"
     }
@@ -71,7 +71,7 @@
       "title": "Buy Me a Coffee",
       "description": "Support with a one-time donation",
       "url": "https://buymeacoffee.com/mrgkanev",
-      "icon": "fas fa-coffee",
+      "icon": "coffee",
       "bgColor": "bg-yellow-500",
       "type": "external"
     },
@@ -80,7 +80,7 @@
       "title": "Patreon",
       "description": "Monthly support & exclusive content",
       "url": "https://patreon.com/mrgkanev",
-      "icon": "fab fa-patreon",
+      "icon": "patreon",
       "bgColor": "bg-orange-600",
       "type": "external"
     },
@@ -89,7 +89,7 @@
       "title": "DigitalOcean",
       "description": "Get $200 credit (I get $25)",
       "url": "https://m.do.co/c/your-referral-code",
-      "icon": "fab fa-digital-ocean",
+      "icon": "digitalocean",
       "bgColor": "bg-blue-600",
       "type": "external"
     },
@@ -98,7 +98,7 @@
       "title": "Hostinger",
       "description": "Web hosting I personally use",
       "url": "https://hostinger.com/your-affiliate-link",
-      "icon": "fas fa-server",
+      "icon": "server",
       "bgColor": "bg-purple-600",
       "type": "external"
     },
@@ -107,7 +107,7 @@
       "title": "Amazon",
       "description": "My wishlist & recommendations",
       "url": "https://amazon.com/your-affiliate-link",
-      "icon": "fab fa-amazon",
+      "icon": "amazon",
       "bgColor": "bg-orange-500",
       "type": "external"
     }

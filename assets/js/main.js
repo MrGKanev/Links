@@ -153,54 +153,6 @@ function generateEmojiFavicon(emoji, backgroundColor = '#667eea') {
   });
 }
 
-// Function to generate web app manifest
-function generateWebAppManifest() {
-  if (!siteConfig.site || !siteConfig.profile) return;
-  
-  // Get the current path for proper start_url
-  const currentPath = window.location.pathname;
-  const basePath = currentPath.endsWith('/') ? currentPath : currentPath + '/';
-  
-  const manifest = {
-    name: siteConfig.site.title,
-    short_name: siteConfig.profile.name,
-    description: siteConfig.site.description,
-    start_url: basePath, // Use current path instead of "/"
-    display: "standalone",
-    background_color: siteConfig.site.favicon?.backgroundColor || "#667eea",
-    theme_color: siteConfig.site.favicon?.backgroundColor || "#667eea",
-    icons: []
-  };
-  
-  // Generate icons with emoji if configured
-  if (siteConfig.site.favicon?.emoji) {
-    const sizes = [192, 512];
-    sizes.forEach(size => {
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
-          <rect width="${size}" height="${size}" rx="${size * 0.1875}" fill="${manifest.background_color}"/>
-          <text x="${size/2}" y="${size * 0.7}" text-anchor="middle" font-size="${size * 0.6}" font-family="Arial, sans-serif">${siteConfig.site.favicon.emoji}</text>
-        </svg>
-      `;
-      const dataUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
-      
-      manifest.icons.push({
-        src: dataUrl,
-        sizes: `${size}x${size}`,
-        type: "image/svg+xml",
-        purpose: size === 192 ? "any maskable" : "any"
-      });
-    });
-  }
-  
-  // Convert manifest to blob and create URL
-  const manifestBlob = new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json' });
-  const manifestUrl = URL.createObjectURL(manifestBlob);
-  
-  // Update manifest link
-  updateLinkTag('manifest', manifestUrl);
-}
-
 // Function to update page content with config data
 function updatePageContent() {
   if (!siteConfig.site) return;
@@ -224,9 +176,6 @@ function updatePageContent() {
       siteConfig.site.favicon.backgroundColor || '#667eea'
     );
   }
-  
-  // Generate web app manifest
-  generateWebAppManifest();
   
   // Update Open Graph tags
   updateMetaTag('og:type', siteConfig.site.type, 'property');
@@ -322,10 +271,11 @@ function updateStructuredData() {
 
 // Function to create a link card
 function createLinkCard(link, isAffiliate = false) {
-  const card = document.createElement('a');
+  // Create list item element for proper semantics
+  const listItem = document.createElement('li');
   
-  // Add the required ARIA role for list items
-  card.setAttribute('role', 'listitem');
+  // Create the anchor element
+  const card = document.createElement('a');
   
   if (link.type === 'discord') {
     card.href = '#';
@@ -344,14 +294,16 @@ function createLinkCard(link, isAffiliate = false) {
         <i class="${link.icon} text-white text-xl" aria-hidden="true"></i>
       </div>
       <div class="flex-1">
-        <h3 class="font-semibold text-gray-900">${link.title}</h3>
+        <h4 class="font-semibold text-gray-900">${link.title}</h4>
         <p class="text-gray-600 text-sm">${link.description}</p>
       </div>
       <i class="fas ${link.type === 'discord' ? 'fa-copy' : 'fa-external-link-alt'} text-gray-400" aria-hidden="true"></i>
     </div>
   `;
 
-  return card;
+  // Append the anchor to the list item
+  listItem.appendChild(card);
+  return listItem;
 }
 
 // Function to handle Discord click
@@ -409,7 +361,7 @@ function toggleAffiliateSection() {
 function addAnalyticsTracking() {
   document.querySelectorAll('a[target="_blank"]').forEach(link => {
     link.addEventListener('click', function () {
-      const linkText = this.querySelector('h3').textContent;
+      const linkText = this.querySelector('h4').textContent;
       console.log(`Clicked on: ${linkText}`);
       // Here you could send analytics data to your preferred service
       // Example: gtag('event', 'click', { link: linkText });
