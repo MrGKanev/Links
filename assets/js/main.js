@@ -284,6 +284,9 @@ function updateStructuredData() {
 function createLinkCard(link, isAffiliate = false) {
   const card = document.createElement('a');
   
+  // Add the required ARIA role for list items
+  card.setAttribute('role', 'listitem');
+  
   if (link.type === 'discord') {
     card.href = '#';
     card.className = 'link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg cursor-pointer';
@@ -298,13 +301,13 @@ function createLinkCard(link, isAffiliate = false) {
   card.innerHTML = `
     <div class="flex items-center">
       <div class="w-12 h-12 ${link.bgColor} rounded-lg flex items-center justify-center mr-4">
-        <i class="${link.icon} text-white text-xl"></i>
+        <i class="${link.icon} text-white text-xl" aria-hidden="true"></i>
       </div>
       <div class="flex-1">
         <h3 class="font-semibold text-gray-900">${link.title}</h3>
         <p class="text-gray-600 text-sm">${link.description}</p>
       </div>
-      <i class="fas ${link.type === 'discord' ? 'fa-copy' : 'fa-external-link-alt'} text-gray-400"></i>
+      <i class="fas ${link.type === 'discord' ? 'fa-copy' : 'fa-external-link-alt'} text-gray-400" aria-hidden="true"></i>
     </div>
   `;
 
