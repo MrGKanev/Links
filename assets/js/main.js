@@ -27,45 +27,95 @@ async function loadData() {
   }
 }
 
+// Function to update or create meta tag
+function updateMetaTag(name, content, attribute = 'name') {
+  if (!content) return;
+  
+  let meta = document.querySelector(`meta[${attribute}="${name}"]`);
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute(attribute, name);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', content);
+}
+
+// Function to update or create link tag
+function updateLinkTag(rel, href) {
+  if (!href) return;
+  
+  let link = document.querySelector(`link[rel="${rel}"]`);
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', rel);
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', href);
+}
+
 // Function to update page content with config data
 function updatePageContent() {
-  // Update page title
-  document.title = siteConfig.site?.title || 'MrGKanev\'s Links';
+  if (!siteConfig.site) return;
   
-  // Update meta description
-  const metaDescription = document.querySelector('meta[name="description"]');
-  if (metaDescription && siteConfig.site?.description) {
-    metaDescription.setAttribute('content', siteConfig.site.description);
-  }
+  // Update basic meta tags
+  document.title = siteConfig.site.title || 'MrGKanev\'s Links';
+  updateMetaTag('title', siteConfig.site.title);
+  updateMetaTag('description', siteConfig.site.description);
+  updateMetaTag('keywords', siteConfig.site.keywords);
+  updateMetaTag('author', siteConfig.site.author);
+  updateMetaTag('robots', siteConfig.site.robots);
+  updateMetaTag('language', siteConfig.site.language);
   
-  // Update profile name
-  const profileName = document.getElementById('profileName');
-  if (profileName && siteConfig.profile?.name) {
-    profileName.textContent = siteConfig.profile.name;
-  }
+  // Update canonical link
+  updateLinkTag('canonical', siteConfig.site.canonical);
   
-  // Update profile bio
-  const profileBio = document.getElementById('profileBio');
-  if (profileBio && siteConfig.profile?.bio) {
-    profileBio.innerHTML = siteConfig.profile.bio.replace(/@(\w+)/g, '<span class="font-semibold">@$1</span>');
-  }
+  // Update Open Graph tags
+  updateMetaTag('og:type', siteConfig.site.type, 'property');
+  updateMetaTag('og:url', siteConfig.site.url, 'property');
+  updateMetaTag('og:title', siteConfig.site.title, 'property');
+  updateMetaTag('og:description', siteConfig.site.description, 'property');
+  updateMetaTag('og:image', siteConfig.site.imageUrl, 'property');
+  updateMetaTag('og:site_name', siteConfig.site.siteName, 'property');
+  updateMetaTag('og:locale', siteConfig.site.locale, 'property');
   
-  // Update profile image
-  const profileImage = document.getElementById('profileImage');
-  if (profileImage && siteConfig.profile?.image) {
-    profileImage.src = siteConfig.profile.image.src;
-    profileImage.alt = siteConfig.profile.image.alt;
+  // Update Twitter tags
+  updateMetaTag('twitter:card', 'summary_large_image', 'property');
+  updateMetaTag('twitter:url', siteConfig.site.url, 'property');
+  updateMetaTag('twitter:title', siteConfig.site.title, 'property');
+  updateMetaTag('twitter:description', siteConfig.site.description, 'property');
+  updateMetaTag('twitter:image', siteConfig.site.imageUrl, 'property');
+  updateMetaTag('twitter:creator', siteConfig.site.twitterHandle, 'property');
+  
+  // Update profile elements
+  if (siteConfig.profile) {
+    const profileName = document.getElementById('profileName');
+    if (profileName && siteConfig.profile.name) {
+      profileName.textContent = siteConfig.profile.name;
+    }
+    
+    const profileBio = document.getElementById('profileBio');
+    if (profileBio && siteConfig.profile.bio) {
+      profileBio.innerHTML = siteConfig.profile.bio.replace(/@(\w+)/g, '<span class="font-semibold">@$1</span>');
+    }
+    
+    const profileImage = document.getElementById('profileImage');
+    if (profileImage && siteConfig.profile.image) {
+      profileImage.src = siteConfig.profile.image.src;
+      profileImage.alt = siteConfig.profile.image.alt;
+    }
   }
   
   // Update footer
-  const footerText = document.getElementById('footerText');
-  const footerLink = document.getElementById('footerLink');
-  if (footerText && siteConfig.footer?.text) {
-    footerText.textContent = siteConfig.footer.text;
-  }
-  if (footerLink && siteConfig.footer?.linkText) {
-    footerLink.textContent = siteConfig.footer.linkText;
-    footerLink.href = siteConfig.footer.linkUrl || '#';
+  if (siteConfig.footer) {
+    const footerText = document.getElementById('footerText');
+    const footerLink = document.getElementById('footerLink');
+    if (footerText && siteConfig.footer.text) {
+      footerText.textContent = siteConfig.footer.text;
+    }
+    if (footerLink && siteConfig.footer.linkText) {
+      footerLink.textContent = siteConfig.footer.linkText;
+      footerLink.href = siteConfig.footer.linkUrl || '#';
+    }
   }
   
   // Update structured data

@@ -3,12 +3,16 @@
     "title": "MrGKanev's Links - Connect with Gabriel Kanev",
     "description": "Connect with MrGKanev (Gabriel Kanev) - Self-employed web developer, geek, and open-source enthusiast. Find all my social media links, projects, and ways to support my work.",
     "keywords": "MrGKanev, Gabriel Kanev, web developer, open source, projects, bimbala, antiproxies, mgknet, github, social media",
-    "url": "https://links.mrgkanev.eu",
+    "url": "https://links.gkanev.com",
     "language": "en",
+    "locale": "en_US",
     "author": "Gabriel Kanev (MrGKanev)",
-    "imageUrl": "https://links.mrgkanev.eu/assets/img/mini_profile.png",
+    "siteName": "MrGKanev's Links",
+    "imageUrl": "https://links.gkanev.com/assets/img/mini_profile.png",
     "twitterHandle": "@mrgkanev",
-    "canonical": "https://links.mrgkanev.eu"
+    "canonical": "https://links.gkanev.com",
+    "robots": "index, follow",
+    "type": "website"
   },
   "profile": {
     "name": "MrGKanev",
