@@ -1,0 +1,11 @@
+{
+  "name": "links-page",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0"
+  },
+  "scripts": {
+    "build": "html-minifier-terser --input-dir . --output-dir dist --file-ext html --collapse-whitespace --remove-comments"
+  }
+}
