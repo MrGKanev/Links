@@ -1,0 +1,43 @@
+{
+  "site": {
+    "title": "MrGKanev's Links - Connect with Gabriel Kanev",
+    "description": "Connect with MrGKanev (Gabriel Kanev) - Self-employed web developer, geek, and open-source enthusiast. Find all my social media links, projects, and ways to support my work.",
+    "keywords": "MrGKanev, Gabriel Kanev, web developer, open source, projects, bimbala, antiproxies, mgknet, github, social media",
+    "url": "https://links.mrgkanev.eu",
+    "language": "en",
+    "author": "Gabriel Kanev (MrGKanev)",
+    "imageUrl": "https://links.mrgkanev.eu/assets/img/mini_profile.png",
+    "twitterHandle": "@mrgkanev",
+    "canonical": "https://links.mrgkanev.eu"
+  },
+  "profile": {
+    "name": "MrGKanev",
+    "fullName": "Gabriel Kanev",
+    "username": "mrgkanev",
+    "title": "Self-employed Web Developer",
+    "bio": "Hello, I'm a self-employed web developer (yep I'm that old), geek, and open-source enthusiast. Some of my projects are @bimbalacom, @antiproxies and @mgknetcom.",
+    "image": {
+      "src": "./assets/img/mini_profile.png",
+      "alt": "MrGKanev - Gabriel Kanev Profile Picture",
+      "width": 400,
+      "height": 400
+    },
+    "projects": [
+      {
+        "name": "@antiproxies",
+        "description": "Anti-proxy solution by MrGKanev"
+      },
+      {
+        "name": "@mgknetcom",
+        "description": "Network services by MrGKanev"
+      }
+    ],
+    "location": "Bulgaria",
+    "website": "https://gkanev.com"
+  },
+  "footer": {
+    "text": "Build your own by forking",
+    "linkText": "Links",
+    "linkUrl": "https://github.com/mrgkanev/links"
+  }
+}

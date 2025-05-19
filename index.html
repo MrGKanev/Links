@@ -7,26 +7,7 @@
   <title>MrGKanev's Links</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-
-    .link-card {
-      transition: all 0.3s ease;
-    }
-
-    .link-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    .bg-gradient-custom {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-  </style>
+  <link href="./assets/css/styles.css" rel="stylesheet">
 </head>
 
 <body class="bg-gradient-custom min-h-screen">
@@ -44,113 +25,35 @@
       </p>
     </div>
 
-    <!-- Links Section -->
-    <div class="space-y-4 mb-8">
-      <!-- GitHub -->
-      <a href="https://github.com/mrgkanev" target="_blank" rel="noopener noreferrer"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center mr-4">
-            <i class="fab fa-github text-white text-xl"></i>
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">GitHub</h3>
-            <p class="text-gray-600 text-sm">Check out my repositories</p>
-          </div>
-          <i class="fas fa-external-link-alt text-gray-400"></i>
-        </div>
-      </a>
+    <!-- Main Links Section -->
+    <div id="mainLinks" class="space-y-4 mb-6"></div>
 
-      <!-- Twitter -->
-      <a href="https://twitter.com/mrgkanev" target="_blank" rel="noopener noreferrer"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-            <i class="fab fa-twitter text-white text-xl"></i>
+    <!-- Affiliate Links Toggle Button -->
+    <div class="mb-4">
+      <button id="affiliateToggle"
+        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg border-2 border-dashed border-purple-300">
+        <div class="flex items-center justify-center">
+          <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
+            <i class="fas fa-heart text-white text-xl"></i>
           </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">Twitter</h3>
-            <p class="text-gray-600 text-sm">Follow me for updates</p>
+          <div class="flex-1 text-center">
+            <h3 class="font-semibold text-gray-900">Support My Work</h3>
+            <p class="text-gray-600 text-sm">Click to see ways you can help</p>
           </div>
-          <i class="fas fa-external-link-alt text-gray-400"></i>
+          <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300" id="toggleIcon"></i>
         </div>
-      </a>
+      </button>
+    </div>
 
-      <!-- Instagram -->
-      <a href="https://instagram.com/mrgkanev" target="_blank" rel="noopener noreferrer"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg">
-        <div class="flex items-center">
-          <div
-            class="w-12 h-12 bg-gradient-to-br from-purple-600 via-pink-600 to-yellow-500 rounded-lg flex items-center justify-center mr-4">
-            <i class="fab fa-instagram text-white text-xl"></i>
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">Instagram</h3>
-            <p class="text-gray-600 text-sm">Behind the scenes</p>
-          </div>
-          <i class="fas fa-external-link-alt text-gray-400"></i>
-        </div>
-      </a>
-
-      <!-- LinkedIn -->
-      <a href="https://www.linkedin.com/in/mrgkanev/" target="_blank" rel="noopener noreferrer"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center mr-4">
-            <i class="fab fa-linkedin-in text-white text-xl"></i>
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">LinkedIn</h3>
-            <p class="text-gray-600 text-sm">Professional network</p>
-          </div>
-          <i class="fas fa-external-link-alt text-gray-400"></i>
-        </div>
-      </a>
-
-      <!-- Discord -->
-      <a href="#" id="discordLink"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg cursor-pointer">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mr-4">
-            <i class="fab fa-discord text-white text-xl"></i>
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">Discord</h3>
-            <p class="text-gray-600 text-sm">Chat with me</p>
-          </div>
-          <i class="fas fa-copy text-gray-400" id="discordIcon"></i>
-        </div>
-      </a>
-
-      <!-- Product Hunt -->
-      <a href="https://www.producthunt.com/@mrgkanev" target="_blank" rel="noopener noreferrer"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mr-4">
-            <i class="fab fa-product-hunt text-white text-xl"></i>
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">Product Hunt</h3>
-            <p class="text-gray-600 text-sm">Product launches</p>
-          </div>
-          <i class="fas fa-external-link-alt text-gray-400"></i>
-        </div>
-      </a>
-
-      <!-- Personal Website -->
-      <a href="https://mrgkanev.eu" target="_blank" rel="noopener noreferrer"
-        class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg">
-        <div class="flex items-center">
-          <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
-            <i class="fas fa-globe text-white text-xl"></i>
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-900">Personal Website</h3>
-            <p class="text-gray-600 text-sm">Portfolio & blog</p>
-          </div>
-          <i class="fas fa-external-link-alt text-gray-400"></i>
-        </div>
-      </a>
+    <!-- Affiliate Links Section -->
+    <div id="affiliateSection" class="affiliate-section mb-8">
+      <div class="space-y-3" id="affiliateLinks"></div>
+      <div class="text-center mt-4">
+        <p class="text-white/70 text-sm">
+          <i class="fas fa-info-circle mr-1"></i>
+          These are affiliate links. Using them helps support my work at no extra cost to you!
+        </p>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -174,56 +77,7 @@
     </div>
   </div>
 
-  <script>
-    // Discord link functionality
-    document.getElementById('discordLink').addEventListener('click', function (e) {
-      e.preventDefault();
-
-      // Replace with your actual Discord username
-      const discordUsername = 'mrgkanev#1234';
-
-      // Copy to clipboard
-      navigator.clipboard.writeText(discordUsername).then(function () {
-        // Show toast notification
-        const toast = document.getElementById('toast');
-        toast.classList.remove('translate-y-full', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
-
-        // Hide toast after 3 seconds
-        setTimeout(function () {
-          toast.classList.add('translate-y-full', 'opacity-0');
-          toast.classList.remove('translate-y-0', 'opacity-100');
-        }, 3000);
-      });
-    });
-
-    // Add click analytics (optional)
-    document.querySelectorAll('a[target="_blank"]').forEach(link => {
-      link.addEventListener('click', function () {
-        const linkText = this.querySelector('h3').textContent;
-        console.log(`Clicked on: ${linkText}`);
-        // Here you could send analytics data to your preferred service
-        // Example: gtag('event', 'click', { link: linkText });
-      });
-    });
-
-    // Add loading animation for smooth page load
-    window.addEventListener('load', function () {
-      document.querySelectorAll('.link-card').forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-          card.style.transition = 'all 0.5s ease';
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, index * 100);
-      });
-    });
-
-    // Add smooth scroll behavior for better UX
-    document.documentElement.style.scrollBehavior = 'smooth';
-  </script>
+  <script src="./assets/js/main.js"></script>
 </body>
 
 </html>

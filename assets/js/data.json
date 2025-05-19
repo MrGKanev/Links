@@ -1,0 +1,115 @@
+{
+  "mainLinks": [
+    {
+      "id": "github",
+      "title": "GitHub",
+      "description": "Check out my repositories",
+      "url": "https://github.com/mrgkanev",
+      "icon": "fab fa-github",
+      "bgColor": "bg-gray-900",
+      "type": "external"
+    },
+    {
+      "id": "twitter",
+      "title": "Twitter",
+      "description": "Follow me for updates",
+      "url": "https://twitter.com/mrgkanev",
+      "icon": "fab fa-twitter",
+      "bgColor": "bg-blue-500",
+      "type": "external"
+    },
+    {
+      "id": "instagram",
+      "title": "Instagram",
+      "description": "Behind the scenes",
+      "url": "https://instagram.com/mrgkanev",
+      "icon": "fab fa-instagram",
+      "bgColor": "bg-gradient-to-br from-purple-600 via-pink-600 to-yellow-500",
+      "type": "external"
+    },
+    {
+      "id": "linkedin",
+      "title": "LinkedIn",
+      "description": "Professional network",
+      "url": "https://www.linkedin.com/in/mrgkanev/",
+      "icon": "fab fa-linkedin-in",
+      "bgColor": "bg-blue-700",
+      "type": "external"
+    },
+    {
+      "id": "discord",
+      "title": "Discord",
+      "description": "Chat with me",
+      "url": "#",
+      "icon": "fab fa-discord",
+      "bgColor": "bg-indigo-600",
+      "type": "discord",
+      "discordUsername": "mrgkanev#1234"
+    },
+    {
+      "id": "producthunt",
+      "title": "Product Hunt",
+      "description": "Product launches",
+      "url": "https://www.producthunt.com/@mrgkanev",
+      "icon": "fab fa-product-hunt",
+      "bgColor": "bg-orange-500",
+      "type": "external"
+    },
+    {
+      "id": "website",
+      "title": "Personal Website",
+      "description": "Portfolio & blog",
+      "url": "https://mrgkanev.eu",
+      "icon": "fas fa-globe",
+      "bgColor": "bg-green-600",
+      "type": "external"
+    }
+  ],
+  "affiliateLinks": [
+    {
+      "id": "buymeacoffee",
+      "title": "Buy Me a Coffee",
+      "description": "Support with a one-time donation",
+      "url": "https://buymeacoffee.com/mrgkanev",
+      "icon": "fas fa-coffee",
+      "bgColor": "bg-yellow-500",
+      "type": "external"
+    },
+    {
+      "id": "patreon",
+      "title": "Patreon",
+      "description": "Monthly support & exclusive content",
+      "url": "https://patreon.com/mrgkanev",
+      "icon": "fab fa-patreon",
+      "bgColor": "bg-orange-600",
+      "type": "external"
+    },
+    {
+      "id": "digitalocean",
+      "title": "DigitalOcean",
+      "description": "Get $200 credit (I get $25)",
+      "url": "https://m.do.co/c/your-referral-code",
+      "icon": "fab fa-digital-ocean",
+      "bgColor": "bg-blue-600",
+      "type": "external"
+    },
+    {
+      "id": "hostinger",
+      "title": "Hostinger",
+      "description": "Web hosting I personally use",
+      "url": "https://hostinger.com/your-affiliate-link",
+      "icon": "fas fa-server",
+      "bgColor": "bg-purple-600",
+      "type": "external"
+    },
+    {
+      "id": "amazon",
+      "title": "Amazon",
+      "description": "My wishlist & recommendations",
+      "url": "https://amazon.com/your-affiliate-link",
+      "icon": "fab fa-amazon",
+      "bgColor": "bg-orange-500",
+      "type": "external"
+    }
+  ]
+}
