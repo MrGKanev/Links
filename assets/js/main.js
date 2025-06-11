@@ -335,6 +335,30 @@ function updateStructuredData() {
   structuredDataScript.textContent = JSON.stringify(structuredData);
 }
 
+// Add loading placeholders to prevent layout shifts
+function createLoadingPlaceholder(count = 6) {
+  const placeholder = document.createElement('div');
+  placeholder.className = 'space-y-4';
+  placeholder.id = 'loading-placeholder';
+  
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement('div');
+    item.className = 'link-card block w-full bg-white rounded-lg p-4 shadow-md animate-pulse';
+    item.innerHTML = `
+      <div class="flex items-center">
+        <div class="w-12 h-12 bg-gray-300 rounded-lg mr-4"></div>
+        <div class="flex-1">
+          <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+          <div class="h-3 bg-gray-300 rounded w-1/2"></div>
+        </div>
+      </div>
+    `;
+    placeholder.appendChild(item);
+  }
+  
+  return placeholder;
+}
+
 // Function to create a link card
 async function createLinkCard(link, isAffiliate = false) {
   // Create list item element for proper semantics
@@ -366,8 +390,9 @@ async function createLinkCard(link, isAffiliate = false) {
   const contentContainer = document.createElement('div');
   contentContainer.className = 'flex-1';
   
+  // Use span instead of h4 to fix heading hierarchy issue
   const title = document.createElement('span');
-  title.className = 'font-semibold text-gray-900 block'; 
+  title.className = 'font-semibold text-gray-900 block';
   title.textContent = link.title;
   
   const description = document.createElement('p');
@@ -408,51 +433,101 @@ function handleDiscordClick(e) {
   });
 }
 
-// Function to show toast notification
+// Updated toast function to prevent layout shifts
 function showToast(message) {
   const toast = document.getElementById('toast');
-  toast.querySelector('span').textContent = message;
-  toast.classList.remove('translate-y-full', 'opacity-0');
-  toast.classList.add('translate-y-0', 'opacity-100');
+  const messageSpan = toast.querySelector('span');
+  
+  messageSpan.textContent = message;
+  
+  // Use transform instead of Tailwind classes to prevent layout shifts
+  toast.style.transform = 'translateY(0) translateZ(0)';
+  toast.style.opacity = '1';
+  toast.classList.add('show');
 
   setTimeout(function () {
-    toast.classList.add('translate-y-full', 'opacity-0');
-    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.style.transform = 'translateY(100%) translateZ(0)';
+    toast.style.opacity = '0';
+    toast.classList.remove('show');
   }, 3000);
 }
 
-// Function to render main links
+// Function to render main links with layout shift prevention
 async function renderMainLinks() {
   const container = document.getElementById('mainLinks');
+  
+  // Add placeholder to reserve space
+  const placeholder = createLoadingPlaceholder(mainLinks.length || 6);
+  container.appendChild(placeholder);
+  
+  // Create a document fragment to batch DOM updates
+  const fragment = document.createDocumentFragment();
+  
   for (const link of mainLinks) {
     const linkCard = await createLinkCard(link);
-    container.appendChild(linkCard);
+    fragment.appendChild(linkCard);
   }
+  
+  // Replace placeholder with actual content in one operation
+  container.removeChild(placeholder);
+  container.appendChild(fragment);
+  
+  // Remove min-height after content is loaded
+  container.style.minHeight = 'auto';
 }
 
-// Function to render affiliate links
+// Function to render affiliate links with layout shift prevention
 async function renderAffiliateLinks() {
   const container = document.getElementById('affiliateLinks');
-  for (const link of affiliateLinks) {
-    const linkCard = await createLinkCard(link, true);
-    container.appendChild(linkCard);
+  
+  if (affiliateLinks.length > 0) {
+    // Add placeholder for affiliate links
+    const placeholder = createLoadingPlaceholder(affiliateLinks.length);
+    container.appendChild(placeholder);
+    
+    const fragment = document.createDocumentFragment();
+    
+    for (const link of affiliateLinks) {
+      const linkCard = await createLinkCard(link, true);
+      fragment.appendChild(linkCard);
+    }
+    
+    // Replace placeholder with actual content
+    container.removeChild(placeholder);
+    container.appendChild(fragment);
+    
+    // Remove min-height after content is loaded
+    container.style.minHeight = 'auto';
   }
 }
 
-// Function to toggle affiliate section
+// Updated toggle function to prevent layout shifts
 function toggleAffiliateSection() {
   const section = document.getElementById('affiliateSection');
   const icon = document.getElementById('toggleIcon');
+  const isExpanded = section.classList.contains('expanded');
   
-  section.classList.toggle('expanded');
-  icon.classList.toggle('rotate-180');
+  // Use transform instead of height to prevent layout shifts
+  if (isExpanded) {
+    section.style.transform = 'scaleY(0)';
+    section.style.transformOrigin = 'top';
+    section.style.opacity = '0';
+    icon.classList.remove('rotate-180');
+    section.classList.remove('expanded');
+  } else {
+    section.style.transform = 'scaleY(1)';
+    section.style.transformOrigin = 'top';
+    section.style.opacity = '1';
+    icon.classList.add('rotate-180');
+    section.classList.add('expanded');
+  }
 }
 
 // Function to add analytics tracking
 function addAnalyticsTracking() {
   document.querySelectorAll('a[target="_blank"]').forEach(link => {
     link.addEventListener('click', function () {
-      const linkText = this.querySelector('h4').textContent;
+      const linkText = this.querySelector('span').textContent;
       console.log(`Clicked on: ${linkText}`);
       // Here you could send analytics data to your preferred service
       // Example: gtag('event', 'click', { link: linkText });
@@ -476,26 +551,35 @@ function addLoadingAnimations() {
   });
 }
 
-// Initialize the page
+// Updated initialization function with better loading management
 async function initializePage() {
-  // Load all data from JSON files
-  await loadData();
-  
-  // Render links (async to load icons)
-  await renderMainLinks();
-  await renderAffiliateLinks();
+  try {
+    // Load all data from JSON files
+    await loadData();
+    
+    // Render links (now with placeholders to prevent shifts)
+    await renderMainLinks();
+    await renderAffiliateLinks();
 
-  // Add event listeners
-  document.getElementById('affiliateToggle').addEventListener('click', toggleAffiliateSection);
+    // Add event listeners
+    document.getElementById('affiliateToggle').addEventListener('click', toggleAffiliateSection);
 
-  // Add analytics tracking
-  addAnalyticsTracking();
+    // Add analytics tracking
+    addAnalyticsTracking();
 
-  // Add loading animations
-  addLoadingAnimations();
+    // Remove loading animations with a slight delay to ensure smooth transition
+    setTimeout(() => {
+      addLoadingAnimations();
+    }, 100);
 
-  // Add smooth scroll behavior
-  document.documentElement.style.scrollBehavior = 'smooth';
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+  } catch (error) {
+    console.error('Error initializing page:', error);
+    // Show error state instead of leaving empty space
+    document.getElementById('mainLinks').innerHTML = '<div class="text-center text-white">Failed to load content</div>';
+  }
 }
 
 // Start initialization when DOM is loaded

@@ -2,14 +2,7 @@
 
 A modern, customizable, and SEO-optimized links page (similar to Linktree) that you can self-host and fully control. Perfect for developers, creators, and businesses who want a professional landing page for all their important links.
 
-![Links Page Preview](https://img.shields.io/badge/Status-Active-green?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
-
-## ✨ Features
+## Features
 
 ### 🎨 **Modern Design**
 
@@ -60,7 +53,7 @@ A modern, customizable, and SEO-optimized links page (similar to Linktree) that 
 ### 1. Fork & Clone
 
 ```bash
-git clone https://github.com/yourusername/links.git
+git clone https://github.com/mrgkanev/links.git
 cd links
 ```
 

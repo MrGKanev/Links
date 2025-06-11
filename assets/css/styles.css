@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 .link-card {
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Remove 'all' transition to prevent layout shifts */
 }
 
 .link-card:hover {
@@ -13,19 +14,25 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+/* Updated affiliate section to use transform instead of height changes */
 .affiliate-section {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
+  transform: scaleY(0);
+  transform-origin: top;
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  /* Remove max-height and overflow hidden to prevent layout shifts */
 }
 
 .affiliate-section.expanded {
-  max-height: 1000px;
+  transform: scaleY(1);
+  opacity: 1;
+  /* Remove max-height change */
 }
 
 .rotate-180 {
   transform: rotate(180deg);
 }
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -36,4 +43,55 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Loading animation for placeholders */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Toast positioning to avoid layout shifts */
+#toast {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  /* Use transform instead of translate classes for better performance */
+  transform: translateY(100%) translateZ(0);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  /* Add will-change for better performance */
+  will-change: transform, opacity;
+}
+
+#toast.show {
+  transform: translateY(0) translateZ(0);
+  opacity: 1;
+}
+
+/* Ensure images don't cause layout shifts */
+img {
+  max-width: 100%;
+  height: auto;
+  /* Add aspect-ratio support where possible */
+}
+
+#profileImage {
+  width: 7rem;
+  /* 112px - Tailwind's w-28 */
+  height: 7rem;
+  /* 112px - Tailwind's h-28 */
+  object-fit: cover;
 }
