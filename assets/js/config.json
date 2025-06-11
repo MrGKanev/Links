@@ -23,7 +23,7 @@
     "fullName": "Gabriel Kanev",
     "username": "mrgkanev",
     "title": "Self-employed Web Developer",
-    "bio": "Hello, I'm a self-employed web developer (yep I'm that old), geek, and open-source enthusiast. Some of my projects are @bimbalacom, @antiproxies and @mgknetcom.",
+    "bio": "Hi, I start, shape, and ship products — from prototypes to polished tools.",
     "image": {
       "src": "./assets/img/mini_profile.png",
       "alt": "MrGKanev - Gabriel Kanev Profile Picture",
@@ -34,10 +34,6 @@
       {
         "name": "@antiproxies",
         "description": "Anti-proxy solution by MrGKanev"
-      },
-      {
-        "name": "@mgknetcom",
-        "description": "Network services by MrGKanev"
       }
     ],
     "location": "Bulgaria",

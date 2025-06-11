@@ -9,7 +9,7 @@
     "build": "html-minifier-terser --input-dir . --output-dir dist --file-ext html --collapse-whitespace --remove-comments"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.7",
-    "tailwindcss": "^4.1.7"
+    "@tailwindcss/cli": "^4.1.8",
+    "tailwindcss": "^4.1.8"
   }
 }
