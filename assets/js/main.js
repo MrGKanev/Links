@@ -1,5 +1,6 @@
 // Global variables to store data
-let mainLinks = [];
+let socialLinks = [];
+let projects = [];
 let affiliateLinks = [];
 let siteConfig = {};
 
@@ -12,7 +13,8 @@ async function loadData() {
     // Load links data
     const linksResponse = await fetch('./assets/js/data.json');
     const linksData = await linksResponse.json();
-    mainLinks = linksData.mainLinks;
+    socialLinks = linksData.socialLinks;
+    projects = linksData.projects;
     affiliateLinks = linksData.affiliateLinks;
 
     // Load config data
@@ -24,7 +26,8 @@ async function loadData() {
   } catch (error) {
     console.error('Error loading data:', error);
     // Fallback to empty arrays if loading fails
-    mainLinks = [];
+    socialLinks = [];
+    projects = [];
     affiliateLinks = [];
     siteConfig = {};
   }
@@ -308,7 +311,7 @@ function updateStructuredData() {
     "description": siteConfig.profile.bio,
     "url": siteConfig.site.url,
     "image": siteConfig.site.imageUrl,
-    "sameAs": mainLinks.filter(link => link.type === 'external').map(link => link.url),
+    "sameAs": socialLinks.filter(link => link.type === 'external' && link.url).map(link => link.url),
     "jobTitle": siteConfig.profile.title,
     "worksFor": {
       "@type": "Organization",
@@ -335,78 +338,77 @@ function updateStructuredData() {
   structuredDataScript.textContent = JSON.stringify(structuredData);
 }
 
-// Add loading placeholders to prevent layout shifts
-function createLoadingPlaceholder(count = 6) {
-  const placeholder = document.createElement('div');
-  placeholder.className = 'space-y-4';
-  placeholder.id = 'loading-placeholder';
-  
-  for (let i = 0; i < count; i++) {
-    const item = document.createElement('div');
-    item.className = 'link-card block w-full bg-white rounded-lg p-4 shadow-md animate-pulse';
-    item.innerHTML = `
-      <div class="flex items-center">
-        <div class="w-12 h-12 bg-gray-300 rounded-lg mr-4"></div>
-        <div class="flex-1">
-          <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-          <div class="h-3 bg-gray-300 rounded w-1/2"></div>
-        </div>
-      </div>
-    `;
-    placeholder.appendChild(item);
+// Function to create a social icon
+async function createSocialIcon(link) {
+  // Skip if no URL provided
+  if (!link.url || link.url.trim() === '') {
+    return null;
   }
+
+  // Create the anchor element
+  const iconLink = document.createElement('a');
   
-  return placeholder;
+  if (link.type === 'discord') {
+    iconLink.href = '#';
+    iconLink.className = 'social-icon block w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1';
+    iconLink.addEventListener('click', handleDiscordClick);
+  } else {
+    iconLink.href = link.url;
+    iconLink.target = '_blank';
+    iconLink.rel = 'noopener noreferrer';
+    iconLink.className = 'social-icon block w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1';
+  }
+
+  // Create icon container
+  const iconContainer = document.createElement('div');
+  iconContainer.className = `w-full h-full ${link.bgColor} rounded-full flex items-center justify-center`;
+  iconContainer.title = link.title;
+  
+  // Create icon (async)
+  const icon = await createSVGIcon(link.icon, 'w-6 h-6 text-white');
+  iconContainer.appendChild(icon);
+  
+  iconLink.appendChild(iconContainer);
+  return iconLink;
 }
 
-// Function to create a link card
-async function createLinkCard(link, isAffiliate = false) {
+// Function to create a project card
+async function createProjectCard(project) {
   // Create list item element for proper semantics
   const listItem = document.createElement('li');
   
   // Create the anchor element
   const card = document.createElement('a');
-  
-  if (link.type === 'discord') {
-    card.href = '#';
-    card.className = 'link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg cursor-pointer';
-    card.addEventListener('click', handleDiscordClick);
-  } else {
-    card.href = link.url;
-    card.target = '_blank';
-    card.rel = 'noopener noreferrer';
-    card.className = `link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg ${isAffiliate ? 'border-l-4 border-purple-500' : ''}`;
-  }
+  card.href = project.url;
+  card.target = '_blank';
+  card.rel = 'noopener noreferrer';
+  card.className = 'link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg';
 
   // Create icon container
   const iconContainer = document.createElement('div');
-  iconContainer.className = `w-12 h-12 ${link.bgColor} rounded-lg flex items-center justify-center mr-4`;
+  iconContainer.className = `w-12 h-12 ${project.bgColor} rounded-lg flex items-center justify-center mr-4`;
   
   // Create icon (async)
-  const icon = await createSVGIcon(link.icon, 'w-6 h-6 text-white');
+  const icon = await createSVGIcon(project.icon, 'w-6 h-6 text-white');
   iconContainer.appendChild(icon);
   
   // Create content container
   const contentContainer = document.createElement('div');
   contentContainer.className = 'flex-1';
   
-  // Use span instead of h4 to fix heading hierarchy issue
-  const title = document.createElement('span');
-  title.className = 'font-semibold text-gray-900 block';
-  title.textContent = link.title;
+  const title = document.createElement('h4');
+  title.className = 'font-semibold text-gray-900';
+  title.textContent = project.title;
   
   const description = document.createElement('p');
   description.className = 'text-gray-600 text-sm';
-  description.textContent = link.description;
+  description.textContent = project.description;
   
   contentContainer.appendChild(title);
   contentContainer.appendChild(description);
   
   // Create external icon (async)
-  const externalIcon = await createSVGIcon(
-    link.type === 'discord' ? 'copy' : 'external', 
-    'w-5 h-5 text-gray-400'
-  );
+  const externalIcon = await createSVGIcon('external', 'w-5 h-5 text-gray-400');
   
   // Create main container
   const mainContainer = document.createElement('div');
@@ -422,10 +424,15 @@ async function createLinkCard(link, isAffiliate = false) {
   return listItem;
 }
 
+// Function to create an affiliate card (reusing existing logic)
+async function createAffiliateCard(link) {
+  return await createProjectCard(link);
+}
+
 // Function to handle Discord click
 function handleDiscordClick(e) {
   e.preventDefault();
-  const discordLink = mainLinks.find(link => link.id === 'discord');
+  const discordLink = socialLinks.find(link => link.id === 'discord');
   const discordUsername = discordLink ? discordLink.discordUsername : 'mrgkanev#1234';
   
   navigator.clipboard.writeText(discordUsername).then(function () {
@@ -433,101 +440,68 @@ function handleDiscordClick(e) {
   });
 }
 
-// Updated toast function to prevent layout shifts
+// Function to show toast notification
 function showToast(message) {
   const toast = document.getElementById('toast');
-  const messageSpan = toast.querySelector('span');
-  
-  messageSpan.textContent = message;
-  
-  // Use transform instead of Tailwind classes to prevent layout shifts
-  toast.style.transform = 'translateY(0) translateZ(0)';
-  toast.style.opacity = '1';
-  toast.classList.add('show');
+  toast.querySelector('span').textContent = message;
+  toast.classList.remove('translate-y-full', 'opacity-0');
+  toast.classList.add('translate-y-0', 'opacity-100');
 
   setTimeout(function () {
-    toast.style.transform = 'translateY(100%) translateZ(0)';
-    toast.style.opacity = '0';
-    toast.classList.remove('show');
+    toast.classList.add('translate-y-full', 'opacity-0');
+    toast.classList.remove('translate-y-0', 'opacity-100');
   }, 3000);
 }
 
-// Function to render main links with layout shift prevention
-async function renderMainLinks() {
-  const container = document.getElementById('mainLinks');
+// Function to render social icons
+async function renderSocialIcons() {
+  const container = document.getElementById('socialIcons');
+  container.innerHTML = ''; // Clear existing content
   
-  // Add placeholder to reserve space
-  const placeholder = createLoadingPlaceholder(mainLinks.length || 6);
-  container.appendChild(placeholder);
-  
-  // Create a document fragment to batch DOM updates
-  const fragment = document.createDocumentFragment();
-  
-  for (const link of mainLinks) {
-    const linkCard = await createLinkCard(link);
-    fragment.appendChild(linkCard);
+  for (const link of socialLinks) {
+    const socialIcon = await createSocialIcon(link);
+    if (socialIcon) { // Only add if icon was created (URL exists)
+      container.appendChild(socialIcon);
+    }
   }
-  
-  // Replace placeholder with actual content in one operation
-  container.removeChild(placeholder);
-  container.appendChild(fragment);
-  
-  // Remove min-height after content is loaded
-  container.style.minHeight = 'auto';
 }
 
-// Function to render affiliate links with layout shift prevention
+// Function to render project links
+async function renderProjectLinks() {
+  const container = document.getElementById('projectLinks');
+  container.innerHTML = ''; // Clear existing content
+  
+  for (const project of projects) {
+    const projectCard = await createProjectCard(project);
+    container.appendChild(projectCard);
+  }
+}
+
+// Function to render affiliate links
 async function renderAffiliateLinks() {
   const container = document.getElementById('affiliateLinks');
+  container.innerHTML = ''; // Clear existing content
   
-  if (affiliateLinks.length > 0) {
-    // Add placeholder for affiliate links
-    const placeholder = createLoadingPlaceholder(affiliateLinks.length);
-    container.appendChild(placeholder);
-    
-    const fragment = document.createDocumentFragment();
-    
-    for (const link of affiliateLinks) {
-      const linkCard = await createLinkCard(link, true);
-      fragment.appendChild(linkCard);
-    }
-    
-    // Replace placeholder with actual content
-    container.removeChild(placeholder);
-    container.appendChild(fragment);
-    
-    // Remove min-height after content is loaded
-    container.style.minHeight = 'auto';
+  for (const link of affiliateLinks) {
+    const linkCard = await createAffiliateCard(link);
+    container.appendChild(linkCard);
   }
 }
 
-// Updated toggle function to prevent layout shifts
+// Function to toggle affiliate section
 function toggleAffiliateSection() {
   const section = document.getElementById('affiliateSection');
   const icon = document.getElementById('toggleIcon');
-  const isExpanded = section.classList.contains('expanded');
   
-  // Use transform instead of height to prevent layout shifts
-  if (isExpanded) {
-    section.style.transform = 'scaleY(0)';
-    section.style.transformOrigin = 'top';
-    section.style.opacity = '0';
-    icon.classList.remove('rotate-180');
-    section.classList.remove('expanded');
-  } else {
-    section.style.transform = 'scaleY(1)';
-    section.style.transformOrigin = 'top';
-    section.style.opacity = '1';
-    icon.classList.add('rotate-180');
-    section.classList.add('expanded');
-  }
+  section.classList.toggle('expanded');
+  icon.classList.toggle('rotate-180');
 }
 
 // Function to add analytics tracking
 function addAnalyticsTracking() {
   document.querySelectorAll('a[target="_blank"]').forEach(link => {
     link.addEventListener('click', function () {
-      const linkText = this.querySelector('span').textContent;
+      const linkText = this.querySelector('h4')?.textContent || this.title || 'Social Icon';
       console.log(`Clicked on: ${linkText}`);
       // Here you could send analytics data to your preferred service
       // Example: gtag('event', 'click', { link: linkText });
@@ -538,6 +512,19 @@ function addAnalyticsTracking() {
 // Function to add loading animations
 function addLoadingAnimations() {
   window.addEventListener('load', function () {
+    // Animate social icons
+    document.querySelectorAll('.social-icon').forEach((icon, index) => {
+      icon.style.opacity = '0';
+      icon.style.transform = 'translateY(-20px)';
+
+      setTimeout(() => {
+        icon.style.transition = 'all 0.5s ease';
+        icon.style.opacity = '1';
+        icon.style.transform = 'translateY(0)';
+      }, index * 100);
+    });
+
+    // Animate project cards
     document.querySelectorAll('.link-card').forEach((card, index) => {
       card.style.opacity = '0';
       card.style.transform = 'translateY(20px)';
@@ -546,40 +533,32 @@ function addLoadingAnimations() {
         card.style.transition = 'all 0.5s ease';
         card.style.opacity = '1';
         card.style.transform = 'translateY(0)';
-      }, index * 100);
+      }, (index + socialLinks.length) * 100);
     });
   });
 }
 
-// Updated initialization function with better loading management
+// Initialize the page
 async function initializePage() {
-  try {
-    // Load all data from JSON files
-    await loadData();
-    
-    // Render links (now with placeholders to prevent shifts)
-    await renderMainLinks();
-    await renderAffiliateLinks();
+  // Load all data from JSON files
+  await loadData();
+  
+  // Render all sections (async to load icons)
+  await renderSocialIcons();
+  await renderProjectLinks();
+  await renderAffiliateLinks();
 
-    // Add event listeners
-    document.getElementById('affiliateToggle').addEventListener('click', toggleAffiliateSection);
+  // Add event listeners
+  document.getElementById('affiliateToggle').addEventListener('click', toggleAffiliateSection);
 
-    // Add analytics tracking
-    addAnalyticsTracking();
+  // Add analytics tracking
+  addAnalyticsTracking();
 
-    // Remove loading animations with a slight delay to ensure smooth transition
-    setTimeout(() => {
-      addLoadingAnimations();
-    }, 100);
+  // Add loading animations
+  addLoadingAnimations();
 
-    // Add smooth scroll behavior
-    document.documentElement.style.scrollBehavior = 'smooth';
-    
-  } catch (error) {
-    console.error('Error initializing page:', error);
-    // Show error state instead of leaving empty space
-    document.getElementById('mainLinks').innerHTML = '<div class="text-center text-white">Failed to load content</div>';
-  }
+  // Add smooth scroll behavior
+  document.documentElement.style.scrollBehavior = 'smooth';
 }
 
 // Start initialization when DOM is loaded
