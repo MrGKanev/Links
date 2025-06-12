@@ -311,7 +311,7 @@ function updateStructuredData() {
     "description": siteConfig.profile.bio,
     "url": siteConfig.site.url,
     "image": siteConfig.site.imageUrl,
-    "sameAs": socialLinks.filter(link => link.type === 'external' && link.url).map(link => link.url),
+    "sameAs": (socialLinks || []).filter(link => link.type === 'external' && link.url).map(link => link.url),
     "jobTitle": siteConfig.profile.title,
     "worksFor": {
       "@type": "Organization",
@@ -540,25 +540,32 @@ function addLoadingAnimations() {
 
 // Initialize the page
 async function initializePage() {
-  // Load all data from JSON files
-  await loadData();
-  
-  // Render all sections (async to load icons)
-  await renderSocialIcons();
-  await renderProjectLinks();
-  await renderAffiliateLinks();
+  try {
+    // Load all data from JSON files
+    await loadData();
+    
+    // Render all sections (async to load icons)
+    await renderSocialIcons();
+    await renderProjectLinks();
+    await renderAffiliateLinks();
 
-  // Add event listeners
-  document.getElementById('affiliateToggle').addEventListener('click', toggleAffiliateSection);
+    // Add event listeners
+    const affiliateToggle = document.getElementById('affiliateToggle');
+    if (affiliateToggle) {
+      affiliateToggle.addEventListener('click', toggleAffiliateSection);
+    }
 
-  // Add analytics tracking
-  addAnalyticsTracking();
+    // Add analytics tracking
+    addAnalyticsTracking();
 
-  // Add loading animations
-  addLoadingAnimations();
+    // Add loading animations
+    addLoadingAnimations();
 
-  // Add smooth scroll behavior
-  document.documentElement.style.scrollBehavior = 'smooth';
+    // Add smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+  } catch (error) {
+    console.error('Error initializing page:', error);
+  }
 }
 
 // Start initialization when DOM is loaded
