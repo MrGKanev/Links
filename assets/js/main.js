@@ -396,7 +396,7 @@ async function createProjectCard(project) {
   const contentContainer = document.createElement('div');
   contentContainer.className = 'flex-1';
   
-  const title = document.createElement('h4');
+  const title = document.createElement('span');
   title.className = 'font-semibold text-gray-900';
   title.textContent = project.title;
   
