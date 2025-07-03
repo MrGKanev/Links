@@ -8,7 +8,7 @@
     "locale": "en_US",
     "author": "Gabriel Kanev (MrGKanev)",
     "siteName": "MrGKanev's Links",
-    "imageUrl": "https://links.gkanev.com/assets/img/mini_profile.png",
+    "imageUrl": "https://links.gkanev.com/assets/img/mini_profile.webp",
     "twitterHandle": "@mrgkanev",
     "canonical": "https://links.gkanev.com",
     "robots": "index, follow",
@@ -25,7 +25,7 @@
     "title": "Self-employed Web Developer",
     "bio": "Hi, I start, shape, and ship products — from prototypes to polished tools.",
     "image": {
-      "src": "./assets/img/mini_profile.png",
+      "src": "./assets/img/mini_profile.webp",
       "alt": "MrGKanev - Gabriel Kanev Profile Picture",
       "width": 400,
       "height": 400

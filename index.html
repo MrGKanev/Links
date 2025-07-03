@@ -12,10 +12,12 @@
 
   <!-- Favicon will be generated dynamically from config.json -->
 
-  <!-- Preload critical resources -->
-  <link rel="preload" href="./assets/js/data.json" as="fetch" crossorigin>
-  <link rel="preload" href="./assets/js/config.json" as="fetch" crossorigin>
-  <link rel="preload" href="./assets/css/styles_min.css" as="style">
+<!-- Preload critical resources -->
+<link rel="preload" href="./assets/js/data.json" as="fetch" crossorigin>
+<link rel="preload" href="./assets/js/config.json" as="fetch" crossorigin>
+<link rel="preload" href="./assets/css/styles_min.css" as="style">
+<link rel="preload" href="./assets/img/mini_profile.webp" as="image">
+<link rel="preload" href="./assets/js/main.js" as="script">
 
   <!-- Stylesheets -->
   <link href="./assets/css/styles_min.css" rel="stylesheet">
@@ -28,7 +30,7 @@
     <!-- Header Section -->
     <header class="text-center mb-8">
       <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-white shadow-lg flex items-center justify-center">
-        <img id="profileImage" src="./assets/img/mini_profile.png" alt="Profile Picture"
+        <img id="profileImage" src="./assets/img/mini_profile.webp" alt="Profile Picture"
           class="w-28 h-28 rounded-full object-cover" width="112" height="112">
       </div>
       <h1 id="profileName" class="text-3xl font-bold text-white mb-4">MrGKanev</h1>

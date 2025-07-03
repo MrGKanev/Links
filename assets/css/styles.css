@@ -1,40 +1,142 @@
 @import "tailwindcss";
 
+/* Performance optimizations */
+* {
+  transform-style: preserve-3d;
+}
+
+/* Critical CSS for LCP optimization */
+.bg-gradient-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  contain: layout style paint;
+}
+
 .link-card {
   transition: all 0.3s ease;
+  transform: translateZ(0);
+  /* Force GPU acceleration */
+  will-change: transform, box-shadow;
 }
 
 .link-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .social-icon {
   transition: all 0.3s ease;
+  transform: translateZ(0);
+  /* Force GPU acceleration */
+  will-change: transform, box-shadow;
 }
 
 .social-icon:hover {
+  transform: translateY(-1px) translateZ(0);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.bg-gradient-custom {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Skeleton loading animations */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Additional utility classes */
+.bg-white\/20 {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.bg-white\/30 {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.w-3\/4 {
+  width: 75%;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.min-h-\[3rem\] {
+  min-height: 3rem;
+}
+
+.min-h-\[4\.5rem\] {
+  min-height: 4.5rem;
+}
+
+.min-h-\[10rem\] {
+  min-height: 10rem;
+}
+
+.min-h-\[12rem\] {
+  min-height: 12rem;
+}
+
+/* Hide skeletons when content loads */
+.content-loaded .social-icon-skeleton,
+.content-loaded .project-skeleton,
+.content-loaded .affiliate-skeleton {
+  display: none;
+}
+
+/* Improved affiliate section animations */
 .affiliate-section {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-out;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+  /* Force GPU acceleration */
+  will-change: max-height;
 }
 
 .affiliate-section.expanded {
   max-height: 1000px;
 }
 
+/* Optimized transforms */
 .rotate-180 {
-  transform: rotate(180deg);
+  transform: rotate(180deg) translateZ(0);
 }
 
+.transform-gpu {
+  transform: translateZ(0);
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+/* Font loading optimization */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Inter Regular'), local('Inter-Regular');
+}
+
+/* Accessibility improvements */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -45,4 +147,27 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Layout stability improvements */
+.min-h-content {
+  min-height: max-content;
+}
+
+/* Preload critical content to prevent FOUC */
+.profile-container {
+  contain: layout style;
+}
+
+/* Improve rendering performance */
+.icon-container {
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+/* Optimize text rendering */
+.text-content {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
