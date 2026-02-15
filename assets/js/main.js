@@ -281,7 +281,9 @@ function updatePageContent() {
     
     const profileBio = document.getElementById('profileBio');
     if (profileBio && siteConfig.profile.bio) {
-      profileBio.innerHTML = siteConfig.profile.bio.replace(/@(\w+)/g, '<span class="font-semibold">@$1</span>');
+      profileBio.textContent = siteConfig.profile.bio;
+      profileBio.classList.remove('content-loading');
+      profileBio.classList.add('fade-in');
     }
     
     const profileImage = document.getElementById('profileImage');
@@ -364,10 +366,10 @@ async function createSocialIcon(link) {
     iconLink.rel = 'noopener noreferrer';
   }
 
-  iconLink.className = 'social-icon block w-10 h-10 rounded-lg bg-white/60 hover:bg-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1';
+  iconLink.className = 'social-icon block w-10 h-10 rounded-lg bg-white/60 hover:bg-white dark:bg-stone-800/60 dark:hover:bg-stone-800 flex items-center justify-center transition-all duration-300 hover:-translate-y-1';
   iconLink.title = link.title;
 
-  const icon = await createSVGIcon(link.icon, 'w-5 h-5 text-stone-600');
+  const icon = await createSVGIcon(link.icon, 'w-5 h-5 text-stone-600 dark:text-stone-300');
   iconLink.appendChild(icon);
   return iconLink;
 }
@@ -390,14 +392,14 @@ async function createProjectCard(project) {
 
   // Text area — bottom ~1/4
   const textArea = document.createElement('div');
-  textArea.className = 'w-full pt-2 border-t border-stone-100';
+  textArea.className = 'w-full pt-2 border-t border-stone-100 dark:border-stone-700';
 
   const title = document.createElement('span');
-  title.className = 'font-semibold text-stone-800 text-xs block leading-tight';
+  title.className = 'font-semibold text-stone-800 dark:text-stone-100 text-xs block leading-tight';
   title.textContent = project.title;
 
   const description = document.createElement('p');
-  description.className = 'text-stone-400 text-[10px] mt-0.5 leading-snug';
+  description.className = 'text-stone-400 dark:text-stone-500 text-[10px] mt-0.5 leading-snug';
   description.textContent = project.description;
 
   textArea.appendChild(title);
@@ -583,9 +585,41 @@ async function initializePage() {
 
     // Add smooth scroll behavior
     document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Initialize theme toggle
+    initThemeToggle();
   } catch (error) {
     console.error('Error initializing page:', error);
   }
+}
+
+// Theme toggle logic
+function initThemeToggle() {
+  const toggle = document.getElementById('themeToggle');
+  const sunIcon = document.getElementById('sunIcon');
+  const moonIcon = document.getElementById('moonIcon');
+
+  function updateIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    sunIcon.classList.toggle('hidden', !isDark);
+    moonIcon.classList.toggle('hidden', isDark);
+  }
+
+  updateIcons();
+
+  toggle.addEventListener('click', function () {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateIcons();
+  });
+
+  // Listen for system preference changes (only when no manual choice)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+    if (!localStorage.getItem('theme')) {
+      document.documentElement.classList.toggle('dark', e.matches);
+      updateIcons();
+    }
+  });
 }
 
 // Start initialization when DOM is loaded

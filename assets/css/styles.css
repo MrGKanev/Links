@@ -1,14 +1,54 @@
 @import "tailwindcss";
 
+/* Class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Performance optimizations */
 * {
   transform-style: preserve-3d;
 }
 
-/* Sage + Neutral color palette */
+/* Sage + Neutral color palette — Light */
 .bg-gradient-custom {
   background: linear-gradient(180deg, #f5f0eb 0%, #e8e2da 50%, #ddd6cc 100%);
   contain: layout style paint;
+}
+
+/* Dark mode (class-based) */
+.dark .bg-gradient-custom {
+  background: linear-gradient(180deg, #1c1917 0%, #1c1917 50%, #171412 100%);
+}
+
+.dark .link-card {
+  background-color: #292524 !important;
+  border-color: #44403c;
+}
+
+.dark .link-card:hover {
+  border-color: #57534e;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.dark .social-icon {
+  background-color: rgba(41, 37, 36, 0.8) !important;
+}
+
+.dark .social-icon:hover {
+  background-color: #292524 !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dark .section-divider {
+  background: linear-gradient(90deg, transparent, #44403c, transparent);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
 }
 
 .link-card {
@@ -41,28 +81,24 @@
   background: linear-gradient(90deg, transparent, #b5c4b1, transparent);
 }
 
-/* Skeleton loading animations */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+/* Fade-in animation for content load */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Hide content until loaded */
+.content-loading {
+  opacity: 0;
 }
 
 /* Optimized transforms */
 .rotate-180 {
   transform: rotate(180deg) translateZ(0);
-}
-
-.transform-gpu {
-  transform: translateZ(0);
 }
 
 /* Font loading optimization */

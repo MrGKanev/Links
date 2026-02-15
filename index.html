@@ -22,41 +22,63 @@
   <!-- Stylesheets -->
   <link href="./assets/css/styles_min.css" rel="stylesheet">
 
+  <!-- Theme: apply dark class early to prevent flash -->
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
   <!-- All other SEO meta tags will be injected by JavaScript from config.json -->
 </head>
 
 <body class="bg-gradient-custom min-h-screen">
-  <div class="container mx-auto px-4 py-12 max-w-3xl">
+  <div class="container mx-auto px-4 py-12 max-w-3xl relative">
+    <!-- Theme Toggle -->
+    <button id="themeToggle" type="button" aria-label="Toggle dark mode"
+      class="theme-toggle absolute top-4 right-4 w-9 h-9 rounded-lg bg-white/60 dark:bg-stone-800/60 hover:bg-white dark:hover:bg-stone-800 flex items-center justify-center text-stone-500 dark:text-stone-400 shadow-sm">
+      <!-- Sun icon (shown in dark mode) -->
+      <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 7.66l-.71-.71M4.05 4.05l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+      </svg>
+      <!-- Moon icon (shown in light mode) -->
+      <svg id="moonIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+      </svg>
+    </button>
+
     <!-- Header Section -->
     <header class="text-center mb-10">
-      <div class="w-28 h-28 mx-auto mb-5 rounded-full bg-white shadow-md ring-2 ring-stone-200 flex items-center justify-center">
+      <div class="w-28 h-28 mx-auto mb-5 rounded-full bg-white dark:bg-stone-800 shadow-md ring-2 ring-stone-200 dark:ring-stone-700 flex items-center justify-center">
         <img id="profileImage" src="./assets/img/mini_profile.webp" alt="Profile Picture"
           class="w-24 h-24 rounded-full object-cover" width="96" height="96">
       </div>
-      <h1 id="profileName" class="text-2xl font-bold text-stone-800 mb-2">MrGKanev</h1>
-      <p id="profileBio" class="text-stone-500 text-base leading-relaxed px-4">
-        Loading...
+      <h1 id="profileName" class="text-2xl font-bold text-stone-800 dark:text-stone-100 mb-2">MrGKanev</h1>
+      <p id="profileBio" class="text-stone-500 dark:text-stone-400 text-base leading-relaxed px-4 content-loading">
       </p>
     </header>
 
     <!-- Social Icons Section -->
     <section aria-label="Social Media Links" class="mb-10">
       <h2 class="sr-only">Social Links</h2>
-      <div id="socialIcons" class="flex justify-center items-center space-x-3 mb-6"></div>
+      <div id="socialIcons" class="flex justify-center items-center flex-wrap gap-3 mb-6"></div>
     </section>
 
     <!-- Projects Section -->
     <section aria-label="Projects and Work" class="mb-10">
-      <h2 class="text-stone-700 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Projects & Work</h2>
+      <h2 class="text-stone-700 dark:text-stone-300 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Projects & Work</h2>
       <ul id="projectLinks" class="grid grid-cols-2 md:grid-cols-4 gap-3"></ul>
     </section>
 
     <!-- Sponsors & Affiliates Section -->
     <section aria-label="Sponsors & Affiliates" class="mb-10">
-      <h2 class="text-stone-700 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Sponsors & Affiliates</h2>
+      <h2 class="text-stone-700 dark:text-stone-300 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Sponsors & Affiliates</h2>
       <ul id="sponsorsAffiliateLinks" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3"></ul>
       <div class="text-center">
-        <p class="text-stone-400 text-xs">
+        <p class="text-stone-400 dark:text-stone-500 text-xs">
           <svg class="w-3.5 h-3.5 inline mr-0.5 -mt-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path
               d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
@@ -68,17 +90,17 @@
 
     <!-- Books Section -->
     <section aria-label="Books" class="mb-10">
-      <h2 class="text-stone-700 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Books</h2>
+      <h2 class="text-stone-700 dark:text-stone-300 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Books</h2>
       <ul id="bookLinks" class="grid grid-cols-2 md:grid-cols-4 gap-3"></ul>
     </section>
 
     <!-- Footer -->
     <footer class="text-center pt-4">
       <div class="section-divider mb-4 mx-8"></div>
-      <p class="text-stone-400 text-xs">
+      <p class="text-stone-400 dark:text-stone-500 text-xs">
         <span id="footerText">Build your own by forking</span>
         <a id="footerLink" href="#" target="_blank" rel="noopener noreferrer"
-          class="text-stone-600 underline hover:text-stone-800">
+          class="text-stone-600 dark:text-stone-400 underline hover:text-stone-800 dark:hover:text-stone-200">
           Links
         </a>
       </p>
