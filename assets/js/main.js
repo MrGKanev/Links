@@ -2,6 +2,9 @@
 let socialLinks = [];
 let projects = [];
 let affiliateLinks = [];
+let sponsorsAffiliates = [];
+let openSourceSoftware = [];
+let books = [];
 let siteConfig = {};
 
 // Cache for loaded SVG icons
@@ -15,7 +18,10 @@ async function loadData() {
     const linksData = await linksResponse.json();
     socialLinks = linksData.socialLinks;
     projects = linksData.projects;
-    affiliateLinks = linksData.affiliateLinks;
+    affiliateLinks = linksData.affiliateLinks || [];
+    sponsorsAffiliates = linksData.sponsorsAffiliates || [];
+    openSourceSoftware = linksData.openSourceSoftware || [];
+    books = linksData.books || [];
 
     // Load config data
     const configResponse = await fetch('./assets/js/config.json');
@@ -29,6 +35,9 @@ async function loadData() {
     socialLinks = [];
     projects = [];
     affiliateLinks = [];
+    sponsorsAffiliates = [];
+    openSourceSoftware = [];
+    books = [];
     siteConfig = {};
   }
 }
@@ -338,88 +347,65 @@ function updateStructuredData() {
   structuredDataScript.textContent = JSON.stringify(structuredData);
 }
 
-// Function to create a social icon
+// Function to create a social icon (minimalistic style)
 async function createSocialIcon(link) {
-  // Skip if no URL provided
   if (!link.url || link.url.trim() === '') {
     return null;
   }
 
-  // Create the anchor element
   const iconLink = document.createElement('a');
-  
+
   if (link.type === 'discord') {
     iconLink.href = '#';
-    iconLink.className = 'social-icon block w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1';
     iconLink.addEventListener('click', handleDiscordClick);
   } else {
     iconLink.href = link.url;
     iconLink.target = '_blank';
     iconLink.rel = 'noopener noreferrer';
-    iconLink.className = 'social-icon block w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1';
   }
 
-  // Create icon container
-  const iconContainer = document.createElement('div');
-  iconContainer.className = `w-full h-full ${link.bgColor} rounded-full flex items-center justify-center`;
-  iconContainer.title = link.title;
-  
-  // Create icon (async)
-  const icon = await createSVGIcon(link.icon, 'w-6 h-6 text-white');
-  iconContainer.appendChild(icon);
-  
-  iconLink.appendChild(iconContainer);
+  iconLink.className = 'social-icon block w-10 h-10 rounded-lg bg-white/60 hover:bg-white flex items-center justify-center transition-all duration-300 hover:-translate-y-1';
+  iconLink.title = link.title;
+
+  const icon = await createSVGIcon(link.icon, 'w-5 h-5 text-stone-600');
+  iconLink.appendChild(icon);
   return iconLink;
 }
 
-// Function to create a project card
+// Function to create a project card (grid box, large icon, text at bottom)
 async function createProjectCard(project) {
-  // Create list item element for proper semantics
   const listItem = document.createElement('li');
-  
-  // Create the anchor element
+
   const card = document.createElement('a');
   card.href = project.url;
   card.target = '_blank';
   card.rel = 'noopener noreferrer';
-  card.className = 'link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg';
+  card.className = 'link-card flex flex-col items-center justify-between text-center bg-white rounded-xl p-4 shadow-sm hover:shadow-md h-full';
 
-  // Create icon container
-  const iconContainer = document.createElement('div');
-  iconContainer.className = `w-12 h-12 ${project.bgColor} rounded-lg flex items-center justify-center mr-4`;
-  
-  // Create icon (async)
-  const icon = await createSVGIcon(project.icon, 'w-6 h-6 text-white');
-  iconContainer.appendChild(icon);
-  
-  // Create content container
-  const contentContainer = document.createElement('div');
-  contentContainer.className = 'flex-1';
-  
+  // Icon area — takes ~3/4 of the card
+  const iconArea = document.createElement('div');
+  iconArea.className = 'flex-1 flex items-center justify-center w-full py-4';
+  const icon = await createSVGIcon(project.icon, `w-16 h-16 ${project.bgColor.replace('bg-', 'text-')}`);
+  iconArea.appendChild(icon);
+
+  // Text area — bottom ~1/4
+  const textArea = document.createElement('div');
+  textArea.className = 'w-full pt-2 border-t border-stone-100';
+
   const title = document.createElement('span');
-  title.className = 'font-semibold text-gray-900';
+  title.className = 'font-semibold text-stone-800 text-xs block leading-tight';
   title.textContent = project.title;
-  
+
   const description = document.createElement('p');
-  description.className = 'text-gray-600 text-sm';
+  description.className = 'text-stone-400 text-[10px] mt-0.5 leading-snug';
   description.textContent = project.description;
-  
-  contentContainer.appendChild(title);
-  contentContainer.appendChild(description);
-  
-  // Create external icon (async)
-  const externalIcon = await createSVGIcon('external', 'w-5 h-5 text-gray-400');
-  
-  // Create main container
-  const mainContainer = document.createElement('div');
-  mainContainer.className = 'flex items-center';
-  mainContainer.appendChild(iconContainer);
-  mainContainer.appendChild(contentContainer);
-  mainContainer.appendChild(externalIcon);
-  
-  card.appendChild(mainContainer);
-  
-  // Append the anchor to the list item
+
+  textArea.appendChild(title);
+  textArea.appendChild(description);
+
+  card.appendChild(iconArea);
+  card.appendChild(textArea);
+
   listItem.appendChild(card);
   return listItem;
 }
@@ -456,11 +442,11 @@ function showToast(message) {
 // Function to render social icons
 async function renderSocialIcons() {
   const container = document.getElementById('socialIcons');
-  container.innerHTML = ''; // Clear existing content
-  
+  container.replaceChildren();
+
   for (const link of socialLinks) {
     const socialIcon = await createSocialIcon(link);
-    if (socialIcon) { // Only add if icon was created (URL exists)
+    if (socialIcon) {
       container.appendChild(socialIcon);
     }
   }
@@ -469,8 +455,8 @@ async function renderSocialIcons() {
 // Function to render project links
 async function renderProjectLinks() {
   const container = document.getElementById('projectLinks');
-  container.innerHTML = ''; // Clear existing content
-  
+  container.replaceChildren();
+
   for (const project of projects) {
     const projectCard = await createProjectCard(project);
     container.appendChild(projectCard);
@@ -480,10 +466,47 @@ async function renderProjectLinks() {
 // Function to render affiliate links
 async function renderAffiliateLinks() {
   const container = document.getElementById('affiliateLinks');
-  container.innerHTML = ''; // Clear existing content
-  
+  if (!container) return;
+  container.replaceChildren();
+
   for (const link of affiliateLinks) {
     const linkCard = await createAffiliateCard(link);
+    container.appendChild(linkCard);
+  }
+}
+
+// Function to render sponsors & affiliates
+async function renderSponsorsAffiliates() {
+  const container = document.getElementById('sponsorsAffiliateLinks');
+  if (!container) return;
+  container.replaceChildren();
+
+  for (const link of sponsorsAffiliates) {
+    const linkCard = await createProjectCard(link);
+    container.appendChild(linkCard);
+  }
+}
+
+// Function to render open source software
+async function renderOpenSourceSoftware() {
+  const container = document.getElementById('openSourceLinks');
+  if (!container) return;
+  container.replaceChildren();
+
+  for (const link of openSourceSoftware) {
+    const linkCard = await createProjectCard(link);
+    container.appendChild(linkCard);
+  }
+}
+
+// Function to render books
+async function renderBooks() {
+  const container = document.getElementById('bookLinks');
+  if (!container) return;
+  container.replaceChildren();
+
+  for (const link of books) {
+    const linkCard = await createProjectCard(link);
     container.appendChild(linkCard);
   }
 }
@@ -547,13 +570,10 @@ async function initializePage() {
     // Render all sections (async to load icons)
     await renderSocialIcons();
     await renderProjectLinks();
+    await renderSponsorsAffiliates();
+    await renderOpenSourceSoftware();
+    await renderBooks();
     await renderAffiliateLinks();
-
-    // Add event listeners
-    const affiliateToggle = document.getElementById('affiliateToggle');
-    if (affiliateToggle) {
-      affiliateToggle.addEventListener('click', toggleAffiliateSection);
-    }
 
     // Add analytics tracking
     addAnalyticsTracking();

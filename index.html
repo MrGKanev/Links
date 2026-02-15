@@ -26,78 +26,59 @@
 </head>
 
 <body class="bg-gradient-custom min-h-screen">
-  <div class="container mx-auto px-4 py-8 max-w-md">
+  <div class="container mx-auto px-4 py-12 max-w-3xl">
     <!-- Header Section -->
-    <header class="text-center mb-8">
-      <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-white shadow-lg flex items-center justify-center">
+    <header class="text-center mb-10">
+      <div class="w-28 h-28 mx-auto mb-5 rounded-full bg-white shadow-md ring-2 ring-stone-200 flex items-center justify-center">
         <img id="profileImage" src="./assets/img/mini_profile.webp" alt="Profile Picture"
-          class="w-28 h-28 rounded-full object-cover" width="112" height="112">
+          class="w-24 h-24 rounded-full object-cover" width="96" height="96">
       </div>
-      <h1 id="profileName" class="text-3xl font-bold text-white mb-4">MrGKanev</h1>
-      <p id="profileBio" class="text-white/90 text-lg leading-relaxed px-4">
+      <h1 id="profileName" class="text-2xl font-bold text-stone-800 mb-2">MrGKanev</h1>
+      <p id="profileBio" class="text-stone-500 text-base leading-relaxed px-4">
         Loading...
       </p>
     </header>
 
     <!-- Social Icons Section -->
-    <section aria-label="Social Media Links" class="mb-8">
+    <section aria-label="Social Media Links" class="mb-10">
       <h2 class="sr-only">Social Links</h2>
-      <div id="socialIcons" class="flex justify-center items-center space-x-4 mb-6"></div>
+      <div id="socialIcons" class="flex justify-center items-center space-x-3 mb-6"></div>
     </section>
 
     <!-- Projects Section -->
-    <section aria-label="Projects and Work">
-      <h2 class="text-white text-lg font-semibold mb-4 text-center">Projects & Work</h2>
-      <ul id="projectLinks" class="space-y-4 mb-6"></ul>
+    <section aria-label="Projects and Work" class="mb-10">
+      <h2 class="text-stone-700 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Projects & Work</h2>
+      <ul id="projectLinks" class="grid grid-cols-2 md:grid-cols-4 gap-3"></ul>
     </section>
 
-    <!-- Affiliate Links Toggle Button -->
-    <section aria-label="Support Options">
-      <div class="mb-4">
-        <button id="affiliateToggle"
-          class="link-card block w-full bg-white rounded-lg p-4 shadow-md hover:shadow-lg border-2 border-dashed border-purple-300"
-          aria-expanded="false" aria-controls="affiliateSection">
-          <div class="flex items-center justify-center">
-            <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
-              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-            </div>
-            <div class="flex-1 text-center">
-              <h3 class="font-semibold text-gray-900">Support My Work</h3>
-              <p class="text-gray-600 text-sm">Click to see ways you can help</p>
-            </div>
-            <svg class="w-5 h-5 text-purple-600 transition-transform duration-300" id="toggleIcon" fill="currentColor"
-              viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
-            </svg>
-          </div>
-        </button>
+    <!-- Sponsors & Affiliates Section -->
+    <section aria-label="Sponsors & Affiliates" class="mb-10">
+      <h2 class="text-stone-700 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Sponsors & Affiliates</h2>
+      <ul id="sponsorsAffiliateLinks" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3"></ul>
+      <div class="text-center">
+        <p class="text-stone-400 text-xs">
+          <svg class="w-3.5 h-3.5 inline mr-0.5 -mt-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+          </svg>
+          Affiliate links - using them supports my work at no extra cost to you.
+        </p>
       </div>
+    </section>
 
-      <!-- Affiliate Links Section -->
-      <div id="affiliateSection" class="affiliate-section mb-8">
-        <h3 class="sr-only">Support Options</h3>
-        <ul class="space-y-3" id="affiliateLinks"></ul>
-        <div class="text-center mt-4">
-          <p class="text-white/70 text-sm">
-            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
-            </svg>
-            These are affiliate links. Using them helps support my work at no extra cost to you!
-          </p>
-        </div>
-      </div>
+    <!-- Books Section -->
+    <section aria-label="Books" class="mb-10">
+      <h2 class="text-stone-700 text-sm font-semibold mb-3 text-center uppercase tracking-wider">Books</h2>
+      <ul id="bookLinks" class="grid grid-cols-2 md:grid-cols-4 gap-3"></ul>
     </section>
 
     <!-- Footer -->
-    <footer class="text-center">
-      <p class="text-white/70 text-sm">
+    <footer class="text-center pt-4">
+      <div class="section-divider mb-4 mx-8"></div>
+      <p class="text-stone-400 text-xs">
         <span id="footerText">Build your own by forking</span>
         <a id="footerLink" href="#" target="_blank" rel="noopener noreferrer"
-          class="text-white underline hover:text-white/90">
+          class="text-stone-600 underline hover:text-stone-800">
           Links
         </a>
       </p>
@@ -105,28 +86,19 @@
 
     <!-- Toast Notification -->
     <div id="toast"
-      class="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300"
+      class="fixed bottom-4 right-4 bg-stone-800 text-white px-5 py-3 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300"
       role="alert" aria-live="polite">
       <div class="flex items-center">
-        <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg class="w-4 h-4 text-emerald-400 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
         </svg>
-        <span>Copied to clipboard!</span>
+        <span class="text-sm">Copied to clipboard!</span>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="./assets/js/main.js"></script>
-
-  <!-- Google Analytics (replace with your tracking ID) -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'GA_TRACKING_ID');
-  </script> -->
 </body>
 
 </html>
