@@ -1,6 +1,14 @@
 {
   "socialLinks": [
     {
+      "id": "website",
+      "title": "gkanev.com",
+      "url": "https://gkanev.com",
+      "icon": "globe",
+      "bgColor": "bg-stone-600",
+      "type": "external"
+    },
+    {
       "id": "linkedin",
       "title": "LinkedIn",
       "url": "https://www.linkedin.com/in/mrgkanev/",
@@ -52,21 +60,21 @@
   ],
   "projects": [
     {
-      "id": "website",
-      "title": "Personal Website",
-      "description": "Portfolio & blog showcasing my work and thoughts",
-      "url": "https://gkanev.com",
-      "icon": "globe",
-      "bgColor": "bg-emerald-700",
-      "type": "external"
-    },
-    {
       "id": "Open-WP-Club",
       "title": "Open-WP-Club",
       "description": "Open-source WordPress community",
       "url": "https://openwpclub.com/",
       "icon": "wordpress",
       "bgColor": "bg-amber-700",
+      "type": "external"
+    },
+    {
+      "id": "ieee-sb",
+      "title": "IEEE SB Uni Ruse",
+      "description": "IEEE Student Branch website",
+      "url": "https://sb-ieee.uni-ruse.bg/",
+      "icon": "ieee",
+      "bgColor": "bg-stone-600",
       "type": "external"
     }
   ],
